@@ -43,20 +43,20 @@ function parseArgs(argv) {
       options.initiative = normalizeInitiative(value);
       continue;
     }
-    throw new Error(`未知参数：${value}`);
+    throw new Error(`Unknown argument：${value}`);
   }
 
   if (!options.help && !options.initiative) {
-    throw new Error('缺少 initiative 名称');
+    throw new Error('Missing initiative name');
   }
 
   return options;
 }
 
 function printUsage() {
-  console.log('用法: node harness/core/operations/create-operation-docs.js <initiative>');
-  console.log('示例: node harness/core/operations/create-operation-docs.js repo-restructure');
-  console.log('选项: --dir <docs-operations-dir> 指定运行态文档目录');
+  console.log('Usage: node harness/core/operations/create-operation-docs.js <initiative>');
+  console.log('Example: node harness/core/operations/create-operation-docs.js repo-restructure');
+  console.log('Option: --dir <docs-operations-dir> specify operations doc directory');
 }
 
 function requiredTemplateFiles() {
@@ -74,7 +74,7 @@ function ensureTemplateFiles(templateDir) {
     file => !fs.existsSync(path.join(templateDir, file))
   );
   if (missingFiles.length > 0) {
-    throw new Error(`模板目录缺少文件: ${missingFiles.join(', ')}`);
+    throw new Error(`Template directory missing files: ${missingFiles.join(', ')}`);
   }
 }
 
@@ -93,7 +93,7 @@ function createOperationDocs(options) {
 
   const targetDir = path.join(options.operationsDir, options.initiative);
   if (fs.existsSync(targetDir)) {
-    throw new Error(`目标目录已存在: ${path.relative(cwdRoot, targetDir)}`);
+    throw new Error(`Target directory already exists: ${path.relative(cwdRoot, targetDir)}`);
   }
 
   fs.mkdirSync(targetDir, { recursive: true });
@@ -128,7 +128,7 @@ function main() {
     }
 
     const result = createOperationDocs(options);
-    console.log(`已创建运行态文档目录: ${path.relative(cwdRoot, result.targetDir)}`);
+    console.log(`Created operations doc directory: ${path.relative(cwdRoot, result.targetDir)}`);
     for (const file of result.files) {
       console.log(`- ${path.relative(cwdRoot, file)}`);
     }

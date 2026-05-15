@@ -1,8 +1,8 @@
 # Templates
 
-本目录承载任务类型模板。
+This directory contains task type templates.
 
-模板列表：
+Template list:
 
 - `new-feature.md`
 - `bug-fix.md`
@@ -10,32 +10,32 @@
 - `ui-adjustment.md`
 - `cross-module-change.md`
 
-选择规则：
+Selection rules:
 
-- 新增功能或新页面：`new-feature.md`
-- 修复异常或回归：`bug-fix.md`
-- 调整结构但不改目标行为：`refactor.md`
-- 样式或交互局部调整：`ui-adjustment.md`
-- 涉及多模块协同改动：`cross-module-change.md`
+- New functionality or new page: `new-feature.md`
+- Fixing an anomaly or regression: `bug-fix.md`
+- Restructuring without changing target behavior: `refactor.md`
+- Local style or interaction adjustment: `ui-adjustment.md`
+- Changes involving multiple modules: `cross-module-change.md`
 
-默认要求：
+Default requirements:
 
-- 先匹配最接近的主模板
-- 只补最小分析点；默认内联到 Requirement / Design gate，不单独输出模板段落
-- 命中多个模板时，以主模板为主，次模板只补缺的边界
+- Match the closest primary template first
+- Only add minimal analysis points; inline into Requirement / Design gate by default, do not output a separate template section
+- When multiple templates match, use the primary template and only supplement missing boundaries from secondary templates
 
-任务尺寸：
+Task sizing:
 
-- `tiny`：模板只取 2-3 个关键字段，仍要输出 Requirement / Design gate
-- `normal`：使用模板默认最小分析点
-- `long-running`：模板字段之外，必须先有阶段级 todo/checklist、执行顺序和当前第一工作包
+- `tiny`: template uses only 2-3 key fields; still must output Requirement / Design gate
+- `normal`: use template default minimal analysis points
+- `long-running`: beyond template fields, must first have a stage-level todo/checklist, execution order, and current first work package
 
-示例：
+Example:
 
 ```text
 Refactor gate
-- 目标：精简流程文档重复说明
-- 边界：只改 harness/core 文档，不改业务代码
-- 整理点：任务尺寸、职责分层、收口证据
-- 验证：Markdown 静态检查和 diff 审阅
+- Goal: reduce repetition in process documentation
+- Boundary: only change harness/core docs, not business code
+- Focus: task sizing, responsibility layering, closeout evidence
+- Verification: Markdown static check and diff review
 ```

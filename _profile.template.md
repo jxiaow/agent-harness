@@ -1,10 +1,10 @@
 # Project Profile
 
-本文件是项目适配的唯一入口。按下面的结构填写你的项目信息。
+This file is the single entry point for project adaptation. Fill in your project information following the structure below.
 
 ## Stack
 
-<!-- 列出项目的技术栈 -->
+<!-- List the project's tech stack -->
 - **Type**: (Monorepo / Single app / Library / CLI / ...)
 - **Frontend**: (React / Vue / Svelte / None / ...)
 - **Backend**: (Express / FastAPI / Go / None / ...)
@@ -12,7 +12,7 @@
 
 ## Repository Shape
 
-<!-- 画出核心目录结构，只列关键目录 -->
+<!-- Draw the core directory structure, list only key directories -->
 ```
 src/
 ├── ...
@@ -21,40 +21,40 @@ src/
 
 ## Product Chain Map
 
-<!-- 列出产品的主要业务链路，帮助 agent 判断任务归属 -->
-- 链路 A（...）
-- 链路 B（...）
+<!-- List the product's main business chains to help the agent determine task ownership -->
+- Chain A (...)
+- Chain B (...)
 
 ## Module Placement
 
-<!-- 告诉 agent 新代码该放哪里 -->
-| 类型 | 路径 |
+<!-- Tell the agent where new code should go -->
+| Type | Path |
 | --- | --- |
 | ... | `src/...` |
 
 ## High-Risk Changes
 
-<!-- 列出改动时需要特别小心的文件/目录 -->
+<!-- List files/directories that require extra caution when modified -->
 - `path/to/critical-file`
 - `path/to/another`
 
 ## Active Rules
 
-<!-- 列出 rules/ 中的项目专属规则及其适用场景 -->
-| 规则 | 适用场景 |
+<!-- List project-specific rules in rules/ and their applicable scenarios -->
+| Rule | Applicable Scenario |
 | --- | --- |
-| `rule-name` | 什么时候读 |
+| `rule-name` | When to read |
 
 ## Reading Sets
 
-<!-- 按任务类型列出应该读哪些规则的组合 -->
-| 任务类型 | 读取规则 |
+<!-- List which rule combinations to read by task type -->
+| Task Type | Rules to Read |
 | --- | --- |
-| 新功能 | `rule-a` + `rule-b` |
-| Bug 修复 | `rule-c` + `rule-d` |
+| New feature | `rule-a` + `rule-b` |
+| Bug fix | `rule-c` + `rule-d` |
 
 ## Project Hard Constraints
 
-<!-- 列出项目的红线 — agent 绝对不能做的事 -->
-- 不要 ...
-- 不要 ...
+<!-- List project red lines — things the agent must never do -->
+- Do not ...
+- Do not ...

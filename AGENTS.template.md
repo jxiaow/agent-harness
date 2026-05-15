@@ -1,86 +1,86 @@
 # AGENTS.md
 
-本文件是 AI/agent 开发流程的总入口。
+This file is the main entry point for the AI/agent development workflow.
 
-- 流程层：`harness/core/`（通用，可独立升级）
-- 项目层：`harness/project/`（当前项目配置）
+- Process layer: `harness/core/` (generic, independently upgradable)
+- Project layer: `harness/project/` (current project configuration)
 
-## 标准流程
+## Standard Workflow
 
 ```
 Requirement → Design → Implementation → Verification → Delivery
 ```
 
-1. 声明任务类型
-2. 输出 Requirement gate
-3. 输出 Design gate
-4. 读取相关规则（`harness/core/rules/` + `harness/project/rules/`）
-5. 实现 → Implementation gate
-6. 验证 → Verification gate
-7. 交付 → Delivery gate
+1. Declare task type
+2. Output Requirement gate
+3. Output Design gate
+4. Read relevant rules (`harness/core/rules/` + `harness/project/rules/`)
+5. Implement → Implementation gate
+6. Verify → Verification gate
+7. Deliver → Delivery gate
 
-## 自动触发
+## Auto Trigger
 
-| 关键词 | 模板 |
+| Keywords | Template |
 | --- | --- |
-| 修复 / bug / 错误 / 问题 | `bug-fix` |
-| 重构 / 优化 / 整理 | `refactor` |
-| 新增 / 添加 / 实现 | `new-feature` |
-| 调整 / 修改 / 改样式 | `ui-adjustment` |
-| 跨模块 / 影响多个 | `cross-module-change` |
-| 整体结构 / 目录调整 / workspace / 迁移 | `cross-module-change` + 长周期处理 |
+| fix / bug / error / issue | `bug-fix` |
+| refactor / optimize / clean up | `refactor` |
+| add / create / implement | `new-feature` |
+| adjust / modify / restyle | `ui-adjustment` |
+| cross-module / affects multiple | `cross-module-change` |
+| overall structure / directory restructure / workspace / migration | `cross-module-change` + long-running handling |
 
-识别到关键词自动进入，不需要用户提醒。
+Automatically enters the workflow when keywords are detected; no user prompt needed.
 
 ## Autopilot
 
-- gate 是过程记录，不是确认点；无阻塞时连续执行
-- 只在需要用户授权、会误伤已有改动、缺关键输入时暂停
-- UI 重设计 / 大幅视觉改版：Design gate 后等用户确认
-- 长周期任务：先建 todo/checklist，按顺序推进
-- 禁止"如果你同意 / 要不要继续"式停顿
+- Gates are process records, not approval checkpoints; execute continuously when unblocked
+- Only pause when user authorization is needed, existing changes could be damaged, or critical input is missing
+- UI redesign / major visual overhaul: wait for user confirmation after Design gate
+- Long-running tasks: create a todo/checklist first, then proceed in order
+- Never pause with "if you agree / shall I continue" style prompts
 
-## 精简输出
+## Concise Output
 
-- 起手 1 句，只说目标
-- gate 用多行短列表
-- 执行中默认不报，关键节点 1 句同步
-- final closeout：结果 → 验证 → 未验证 → 风险
+- Open with 1 sentence stating the goal
+- Gates use multi-line short lists
+- No status updates during execution by default; 1 sentence sync at key checkpoints
+- Final closeout: result → verified → unverified → risk
 
 ## Hard Constraints
 
-- 无论改动多小，必须过 gate
-- 禁止跳过流程直接写实现
-- 禁止把中间进度写成最终交付格式
-- 默认自动推进，不用提问替代可自行完成的动作
-- 不要默认执行编译/构建或启动 dev server（除非验证必须）
-- 测试失败时先执行 `harness/core/rules/test-failure-triage.md`
+- All changes, no matter how small, must go through gates
+- Never skip the workflow and jump straight to implementation
+- Never format intermediate progress as final delivery
+- Auto-advance by default; do not ask questions in place of actions you can complete yourself
+- Do not run builds or start dev servers by default (unless required for verification)
+- On test failure, first execute `harness/core/rules/test-failure-triage.md`
 
-## 项目配置
+## Project Configuration
 
-见 `harness/project/profile.md`
+See `harness/project/profile.md`
 
 ## Navigation
 
-| 内容 | 路径 |
+| Content | Path |
 | --- | --- |
-| 项目配置 | `harness/project/profile.md` |
-| 项目规则 | `harness/project/rules/` |
-| 任务模板 | `harness/core/templates/` |
-| 阶段 gate | `harness/core/gates/` |
-| 通用规则 | `harness/core/rules/` |
-| 自动化 | `harness/core/automation/` |
-| 运行态文档模板 | `harness/core/operations/` |
+| Project config | `harness/project/profile.md` |
+| Project rules | `harness/project/rules/` |
+| Task templates | `harness/core/templates/` |
+| Stage gates | `harness/core/gates/` |
+| Generic rules | `harness/core/rules/` |
+| Automation | `harness/core/automation/` |
+| Operations doc templates | `harness/core/operations/` |
 
-## 接入新项目
+## Onboarding a New Project
 
 ```bash
 git submodule add https://github.com/jxiaow/agent-harness.git harness/core
 mkdir -p harness/project/rules
 ```
 
-然后给 AI 一句话：
+Then give the AI a one-liner:
 
-> 读 `harness/core/ONBOARD.md`，根据这个仓库生成 profile 和规则。
+> Read `harness/core/ONBOARD.md` and generate the profile and rules for this repository.
 
-AI 会自动完成：生成 `harness/project/profile.md`、项目规则、`AGENTS.md`。
+The AI will automatically complete: generating `harness/project/profile.md`, project rules, and `AGENTS.md`.

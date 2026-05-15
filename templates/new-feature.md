@@ -2,31 +2,31 @@
 
 ## Goal
 
-明确功能目标、落点和边界，避免把新增功能做成无边界扩张。
+Clarify the feature goal, placement, and boundaries to avoid unbounded scope creep.
 
 ## Minimal Analysis
 
-默认只补这 5 项：
+Only add these 5 items by default:
 
-- 功能目标
-- 面向谁 / 入口在哪
-- 主要落点
-- 成功标准
-- 明确不做什么
+- Feature goal
+- Target user / entry point
+- Primary placement
+- Success criteria
+- Explicitly out of scope
 
 ## Only Add When Relevant
 
-- 涉及界面：补主题、响应式、组件或视图模式
-- 涉及运行时桥接：补 adapter / command / IPC / message 边界
-- 涉及公共接口：补入口、状态容器、组合逻辑和通信链
-- 涉及新文件：补应用入口、注册入口、导出入口或依赖清单
+- Involves UI: add theme, responsiveness, component or view patterns
+- Involves runtime bridge: add adapter / command / IPC / message boundaries
+- Involves public interface: add entry point, state container, composition logic, and communication chain
+- Involves new files: add application entry, registration entry, export entry, or dependency manifest
 
 ## Recommended Output
 
 ```text
 Feature gate
-- 目标：...
-- 落点：...
-- 关键改动：...
-- 验证：...
+- Goal: ...
+- Placement: ...
+- Key changes: ...
+- Verification: ...
 ```

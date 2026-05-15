@@ -4,7 +4,7 @@ agent-harness is a portable process layer for AI coding agents. It makes agents 
 
 It is for teams using tools like Codex, Claude Code, Gemini CLI, or custom coding agents inside real repositories where "just change the code" often turns into skipped context, half-finished refactors, vague verification, or messy docs.
 
-中文说明：[README.zh-CN.md](README.zh-CN.md)
+Chinese version: [README.zh-CN.md](README.zh-CN.md)
 
 ## Why It Exists
 
@@ -147,8 +147,8 @@ harness/
 
 - [Workflow reference](docs/workflow-reference.md)
 - [Maintaining agent-harness](docs/maintaining.md)
-- [中文工作流参考](docs/workflow-reference.zh-CN.md)
-- [中文维护说明](docs/maintaining.zh-CN.md)
+- [Workflow reference (Chinese)](docs/workflow-reference.zh-CN.md)
+- [Maintaining (Chinese)](docs/maintaining.zh-CN.md)
 
 The workflow reference defines the closeout target types: `single-task`, `staged/ongoing`, `continuation`, and `explicit-closeout`.
 

@@ -64,7 +64,7 @@ function checkVueViewRouterEntry(relativePath, baseDir) {
     buildIssue(
       'vue-view-router-entry',
       relativePath,
-      `新增视图 ${viewName} 需要同步 apps/desktop-ui/src/router/index.js`
+      `New view ${viewName} must be registered in apps/desktop-ui/src/router/index.js`
     ),
   ];
 }
@@ -98,7 +98,7 @@ function checkSyncRouteMounted(relativePath, baseDir) {
     buildIssue(
       'sync-route-mounted',
       relativePath,
-      `新增路由 ${routeName} 需要挂载到 create-server.js`
+      `New route ${routeName} must be mounted in create-server.js`
     ),
   ];
 }
@@ -121,7 +121,7 @@ function checkAsyncRouteHandler(relativePath, content) {
   }
 
   return [
-    buildIssue('async-route-handler', relativePath, '异步路由 handler 需要使用 asyncHandler 包装'),
+    buildIssue('async-route-handler', relativePath, 'Async route handler must be wrapped with asyncHandler'),
   ];
 }
 
@@ -139,7 +139,7 @@ function checkDirectPouchDb(relativePath, content) {
   }
 
   return [
-    buildIssue('route-direct-pouchdb', relativePath, '路由层不应直接 require PouchDB 或数据库实现'),
+    buildIssue('route-direct-pouchdb', relativePath, 'Route layer should not directly require PouchDB or database implementation'),
   ];
 }
 
@@ -251,14 +251,14 @@ function resolveTargetFiles(argv, baseDir) {
 
 function printUsage() {
   console.log(
-    '用法: node harness/core/automation/check-entry.js --files <changed-file> [...]'
+    'Usage: node harness/core/automation/check-entry.js --files <changed-file> [...]'
   );
-  console.log('用法: node harness/core/automation/check-entry.js --changed');
-  console.log('用法: node harness/core/automation/check-entry.js --staged');
-  console.log('选项: --max-issues <n> 限制输出的问题数量，默认 5');
-  console.log('选项: --summary 只输出按规则聚合的数量');
+  console.log('Usage: node harness/core/automation/check-entry.js --changed');
+  console.log('Usage: node harness/core/automation/check-entry.js --staged');
+  console.log('Option: --max-issues <n> limit issue output count, default 5');
+  console.log('Option: --summary only output counts aggregated by rule');
   console.log(
-    '示例: node harness/core/automation/check-entry.js --files apps/desktop-ui/src/views/Foo.vue'
+    'Example: node harness/core/automation/check-entry.js --files apps/desktop-ui/src/views/Foo.vue'
   );
 }
 
@@ -272,7 +272,7 @@ function printIssues(issues, maxIssues) {
 
   const hiddenCount = issues.length - visibleIssues.length;
   if (hiddenCount > 0) {
-    console.log(`另有 ${hiddenCount} 个问题未显示；可用 --max-issues 调整输出数量。`);
+    console.log(`Another ${hiddenCount} issue(s) not shown; use --max-issues to adjust.`);
   }
 }
 
@@ -294,7 +294,7 @@ function writeReport(reportPath, payload) {
 
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(reportPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  console.log(`详细报告: ${reportPath}`);
+  console.log(`Detailed report: ${reportPath}`);
 }
 
 function run(argv, options = {}) {
@@ -322,7 +322,7 @@ function main() {
   const reportPath = parseReportPath(argv);
   if (files.length === 0) {
     if (argv.includes('--changed') || argv.includes('--staged') || parseFiles(argv).length > 0) {
-      console.log('未发现入口检查问题（没有可检查的变更文件）');
+      console.log('No entry check issues found (no checkable changed files)');
       process.exit(0);
     }
 
@@ -331,11 +331,11 @@ function main() {
   }
 
   if (issues.length === 0) {
-    console.log(`未发现入口检查问题（扫描 ${files.length} 个文件）`);
+    console.log(`No entry check issues found(scanned ${files.length} files)`);
     process.exit(0);
   }
 
-  console.log(`发现 ${issues.length} 个入口检查问题:\n`);
+  console.log(`Found ${issues.length} entry check issue(s):\n`);
   if (summary) {
     printSummary(issues);
   } else {

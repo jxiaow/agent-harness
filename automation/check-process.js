@@ -60,17 +60,17 @@ function checkFinalCloseoutEvidence(relativePath, content) {
   }
 
   const missing = [];
-  if (!hasAny(content, [/结果[:：]/, /已完成[:：]/])) {
-    missing.push('缺少结果');
+  if (!hasAny(content, [/结果[:：]/, /已完成[:：]/, /[Rr]esult[:：]/])) {
+    missing.push('missing result');
   }
-  if (!hasAny(content, [/验证[:：]/, /已验证[:：]/, /最近一次关键验证命令/])) {
-    missing.push('缺少验证');
+  if (!hasAny(content, [/验证[:：]/, /已验证[:：]/, /最近一次关键验证命令/, /[Vv]erif/])) {
+    missing.push('missing verification');
   }
-  if (!hasAny(content, [/未验证[:：]/, /未验证项/])) {
-    missing.push('缺少未验证');
+  if (!hasAny(content, [/未验证[:：]/, /未验证项/, /[Uu]nverified/])) {
+    missing.push('missing unverified');
   }
-  if (!hasAny(content, [/风险[:：]/, /剩余风险/])) {
-    missing.push('缺少风险');
+  if (!hasAny(content, [/风险[:：]/, /剩余风险/, /[Rr]isk[:：]/])) {
+    missing.push('missing risk');
   }
 
   if (missing.length === 0) {
@@ -81,7 +81,7 @@ function checkFinalCloseoutEvidence(relativePath, content) {
     buildIssue(
       'final-closeout-evidence',
       relativePath,
-      `final closeout 缺少证据锚点: ${missing.join('、')}`
+      `final closeout missing evidence anchors: ${missing.join(', ')}`
     ),
   ];
 }
@@ -99,7 +99,7 @@ function checkInProgressFinalCloseout(relativePath, content) {
     buildIssue(
       'in-progress-final-closeout',
       relativePath,
-      'in_progress / 进行中状态下不能输出 final closeout'
+      'Cannot output final closeout while in in_progress state'
     ),
   ];
 }
@@ -121,7 +121,7 @@ function checkFinalCloseoutNextStep(relativePath, content) {
     buildIssue(
       'final-closeout-next-step',
       relativePath,
-      'final closeout 不应添加非阻塞的下一步建议；有可执行项时应继续执行'
+      'final closeout should not add non-blocking next-step suggestions; continue executing when actionable items exist'
     ),
   ];
 }
@@ -151,7 +151,7 @@ function checkFinalCloseoutActionableRisk(relativePath, content) {
     buildIssue(
       'final-closeout-actionable-risk',
       relativePath,
-      'final closeout 不能把可继续处理的事项包装成剩余风险；应继续执行或说明真实阻塞'
+      'final closeout must not package actionable items as residual risk; continue executing or explain real blocker'
     ),
   ];
 }
@@ -161,8 +161,8 @@ function checkFinalCloseoutRiskBoilerplate(relativePath, content) {
     return [];
   }
 
-  const hasNoUnverified = /未验证[:：]\s*(无|无未验证|none|n\/a)(?:\s|$)/i.test(content);
-  const hasNoRisk = /风险[:：]\s*(无|无风险|未发现新的剩余风险|none|n\/a)(?:\s|$)/i.test(content);
+  const hasNoUnverified = /未验证[:：]\s*(无|无未验证|none|n\/a)(?:\s|$)/i.test(content) || /[Uu]nverified[:：]\s*(none|n\/a|no unverified)(?:\s|$)/i.test(content);
+  const hasNoRisk = /风险[:：]\s*(无|无风险|未发现新的剩余风险|none|n\/a)(?:\s|$)/i.test(content) || /[Rr]isk[:：]\s*(none|n\/a|no risk|no new risk)(?:\s|$)/i.test(content);
   if (!hasNoUnverified || !hasNoRisk) {
     return [];
   }
@@ -171,7 +171,7 @@ function checkFinalCloseoutRiskBoilerplate(relativePath, content) {
     buildIssue(
       'final-closeout-risk-boilerplate',
       relativePath,
-      '无未验证项且无真实风险时，不要为凑格式输出风险样板话'
+      'When no unverified items and no real risk exist, do not output boilerplate risk text for formatting'
     ),
   ];
 }
@@ -201,7 +201,7 @@ function checkFinalCloseoutNextStepConflict(relativePath, content) {
 function checkGateOutputOneLine(relativePath, content) {
   const issues = [];
   const gatePattern = /\b(Requirement|Design|Implementation|Verification|Delivery)\s+gate\s*[:：]/g;
-  const taskTypePattern = /任务类型\s*[:：]/;
+  const taskTypePattern = /任务类型\s*[:：]|[Tt]ask\s+[Tt]ype\s*[:：]/;
   const lines = content.split(/\r?\n/);
 
   lines.forEach((line, index) => {
@@ -214,7 +214,7 @@ function checkGateOutputOneLine(relativePath, content) {
       buildIssue(
         'gate-output-one-line',
         relativePath,
-        `第 ${index + 1} 行包含挤在一起的任务类型或 gate 输出；任务类型和不同 gate 必须换行分隔`
+        `Line ${index + 1} contains task type or gate outputs crammed together; task type and different gates must be separated by newlines`
       )
     );
   });
@@ -229,13 +229,13 @@ function checkLongRunningPlan(relativePath, content) {
 
   const missing = [];
   if (!/- \[[ x-]\]/.test(content)) {
-    missing.push('缺少阶段级 checklist');
+    missing.push('missing stage-level checklist');
   }
-  if (!/执行顺序|阶段顺序/.test(content)) {
-    missing.push('缺少执行顺序');
+  if (!/执行顺序|阶段顺序|[Ee]xecution\s+[Oo]rder|[Ss]tage\s+[Oo]rder/.test(content)) {
+    missing.push('missing execution order');
   }
   if (!/当前工作包|第一工作包|current work package/i.test(content)) {
-    missing.push('缺少当前工作包');
+    missing.push('missing current work package');
   }
 
   if (missing.length === 0) {
@@ -246,7 +246,7 @@ function checkLongRunningPlan(relativePath, content) {
     buildIssue(
       'long-running-plan',
       relativePath,
-      `long-running 任务缺少阶段计划字段: ${missing.join('、')}`
+      `long-running task missing stage plan fields: ${missing.join(', ')}`
     ),
   ];
 }
@@ -265,12 +265,12 @@ function checkOperationDocLocation(relativePath, content) {
   const fileNameLooksLikeOperationDoc =
     /(^|[-_])(board|matrix|decisions)(\.md)$/.test(fileName) || /^current-.*\.md$/.test(fileName);
   const contentLooksLikeOperationDoc =
-    /运行态文档|运行态执行板|验证矩阵|决策记录|当前状态|工作包|阻塞项|完成标准|验证方式/.test(
+    /运行态文档|运行态执行板|验证矩阵|决策记录|当前状态|工作包|阻塞项|完成标准|验证方式|[Ee]xecution [Bb]oard|[Vv]erification [Mm]atrix|[Dd]ecision [Ll]og|[Ww]ork [Pp]ackage/.test(
       content
     ) || /^- \[[ x-]\]/m.test(content);
   const looksLikeOperationDoc =
     /^current-.*\.md$/.test(fileName) ||
-    /运行态文档|运行态执行板|验证矩阵|决策记录/.test(content) ||
+    /运行态文档|运行态执行板|验证矩阵|决策记录|[Ee]xecution [Bb]oard|[Vv]erification [Mm]atrix|[Dd]ecision [Ll]og/.test(content) ||
     (fileNameLooksLikeOperationDoc && contentLooksLikeOperationDoc);
 
   if (!looksLikeOperationDoc) {
@@ -281,7 +281,7 @@ function checkOperationDocLocation(relativePath, content) {
     buildIssue(
       'operation-doc-location',
       relativePath,
-      '运行态执行板、验证矩阵、决策记录应放在 docs/operations/'
+      'Operations board, verification matrix, and decision log should be in docs/operations/'
     ),
   ];
 }
@@ -302,7 +302,7 @@ function checkCloseoutTargetTypes(relativePath, content) {
     buildIssue(
       'closeout-target-types',
       relativePath,
-      `README 缺少 final closeout 目标类型: ${missing.join('、')}`
+      `README missing final closeout target types: ${missing.join(', ')}`
     ),
   ];
 }
@@ -316,15 +316,15 @@ function checkDeliveryContinuationCloseout(relativePath, content) {
   const missing = [];
   if (
     !/continuation/.test(content) ||
-    !/继续\s*\/\s*开始\s*\/\s*接着做\s*\/\s*按计划执行/.test(content)
+    !/继续\s*\/\s*开始\s*\/\s*接着做\s*\/\s*按计划执行|continue\s*\/\s*start\s*\/\s*proceed/.test(content)
   ) {
-    missing.push('缺少 continuation 继承规则');
+    missing.push('missing continuation inheritance rule');
   }
   if (!/执行板|board/i.test(content) || !/checklist/.test(content)) {
-    missing.push('缺少执行板/checklist 收口确认');
+    missing.push('missing board/checklist closeout confirmation');
   }
-  if (!/工作包完成当最终完成|工作包完成当作最终完成|仅完成一个工作包/.test(content)) {
-    missing.push('缺少禁止单工作包误收口规则');
+  if (!/工作包完成当最终完成|工作包完成当作最终完成|仅完成一个工作包|single work package.*final|work package completion.*final/.test(content)) {
+    missing.push('missing rule forbidding single work package false closeout');
   }
 
   if (missing.length === 0) {
@@ -335,7 +335,7 @@ function checkDeliveryContinuationCloseout(relativePath, content) {
     buildIssue(
       'delivery-continuation-closeout',
       relativePath,
-      `Delivery gate 缺少 continuation 收口约束: ${missing.join('、')}`
+      `Delivery gate missing continuation closeout constraints: ${missing.join(', ')}`
     ),
   ];
 }
@@ -360,13 +360,13 @@ function checkFile(filePath, baseDir) {
 }
 
 function printUsage() {
-  console.log('用法: node harness/core/automation/check-process.js <file-or-dir> [...]');
-  console.log('用法: node harness/core/automation/check-process.js --changed');
-  console.log('用法: node harness/core/automation/check-process.js --staged');
-  console.log('选项: --max-issues <n> 限制输出的问题数量，默认 5');
-  console.log('选项: --summary 只输出按规则聚合的数量');
+  console.log('Usage: node harness/core/automation/check-process.js <file-or-dir> [...]');
+  console.log('Usage: node harness/core/automation/check-process.js --changed');
+  console.log('Usage: node harness/core/automation/check-process.js --staged');
+  console.log('Option: --max-issues <n> limit issue output count, default 5');
+  console.log('Option: --summary only output counts aggregated by rule');
   console.log(
-    '示例: node harness/core/automation/check-process.js AGENTS.md harness/core docs'
+    'Example: node harness/core/automation/check-process.js AGENTS.md harness/core docs'
   );
 }
 
@@ -466,7 +466,7 @@ function writeReport(reportPath, payload) {
 
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(reportPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  console.log(`详细报告: ${reportPath}`);
+  console.log(`Detailed report: ${reportPath}`);
 }
 
 function printIssues(issues, maxIssues) {
@@ -479,7 +479,7 @@ function printIssues(issues, maxIssues) {
 
   const hiddenCount = issues.length - visibleIssues.length;
   if (hiddenCount > 0) {
-    console.log(`另有 ${hiddenCount} 个问题未显示；可用 --max-issues 调整输出数量。`);
+    console.log(`Another ${hiddenCount} issue(s) not shown; use --max-issues to adjust.`);
   }
 }
 
@@ -526,11 +526,11 @@ function main() {
   const reportPath = parseReportPath(process.argv.slice(2));
 
   if (issues.length === 0) {
-    console.log(`未发现流程检查问题（扫描 ${files.length} 个 Markdown 文件）`);
+    console.log(`No process check issues found(scanned ${files.length} Markdown files)`);
     process.exit(0);
   }
 
-  console.log(`发现 ${issues.length} 个流程检查问题:\n`);
+  console.log(`Found ${issues.length} process check issue(s):\n`);
   if (summary) {
     printSummary(issues);
   } else {

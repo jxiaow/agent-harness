@@ -2,68 +2,68 @@
 
 ## Goal
 
-防止 agent 为了让测试变绿而改错目标，把当前需求、用户刚改过的 UI 或有效实现回退到旧测试契约。
+Prevent the agent from reverting current requirements, user-confirmed UI, or valid implementations back to stale test contracts just to make tests green.
 
 ## When To Apply
 
-遇到以下任一情况，必须先执行本规则，再提出或实施修复：
+Execute this rule before proposing or implementing a fix whenever any of the following occur:
 
-- 单元测试、集成测试、E2E、lint contract 或快照失败
-- 用户要求"修测试 / 测试失败都要修复"
-- 代码已改动后发现测试断言旧 DOM、旧 class、旧 prop、旧文案或旧流程
-- 验证阶段留下"测试需要后续处理"一类风险
+- Unit test, integration test, E2E, lint contract, or snapshot failure
+- User requests "fix tests / all test failures must be fixed"
+- After code changes, tests assert old DOM, old classes, old props, old copy, or old flows
+- Verification stage leaves "tests need follow-up" as a risk
 
 ## Required Triage
 
-修复前必须先判断测试失败属于哪一类：
+Before fixing, determine which category the test failure belongs to:
 
-| 类型 | 判定依据 | 默认修复方向 |
+| Type | Determination basis | Default fix direction |
 | --- | --- | --- |
-| 实现回归 | 测试仍代表当前需求，生产代码偏离预期 | 修生产代码 |
-| 测试契约过期 | 当前实现是用户明确保留或新设计目标，测试还断言旧结构 | 修测试 |
-| 需求变化未同步测试 | 需求已变化，但测试覆盖旧行为或缺少新行为 | 同步测试契约，再补必要实现 |
-| 环境 / fixture 问题 | 失败来自 mock、fixture、时序、权限、数据初始化 | 修测试环境或 fixture |
+| Implementation regression | Test still represents current requirements; production code deviates from expected | Fix production code |
+| Stale test contract | Current implementation is user-confirmed or new design target; test still asserts old structure | Fix test |
+| Requirement change not synced | Requirements changed but tests cover old behavior or lack new behavior | Sync test contract, then add necessary implementation |
+| Environment / fixture issue | Failure comes from mock, fixture, timing, permissions, or data initialization | Fix test environment or fixture |
 
-不能只根据"测试失败"直接决定改生产代码。
+Cannot decide to change production code based solely on "test failed".
 
 ## Hard Rules
 
-- 若当前实现是用户刚改过、明确要求保留、或 Design gate 认定的目标状态，禁止回退实现来迎合旧测试。
-- 测试断言旧 class、旧 DOM 层级、旧 prop、旧快照或旧文案时，先验证这些断言是否仍是当前契约；不是当前契约就更新测试。
-- 修测试时不能删断言来"放过"失败；必须把断言迁移到当前可观察行为、交互、可访问性或数据契约。
-- 修生产代码时不能为了满足测试而破坏用户已确认的 UI、行为或架构边界。
-- 如果无法判断测试还是实现错，必须继续读取相关实现、测试、需求记录或设计文档；不能用猜测推进。
+- If current implementation was just changed by the user, explicitly requested to keep, or determined as target state by Design gate, reverting implementation to satisfy old tests is forbidden.
+- When tests assert old classes, old DOM hierarchy, old props, old snapshots, or old copy, first verify whether those assertions are still the current contract; if not, update the test.
+- When fixing tests, cannot delete assertions to "let failures pass"; must migrate assertions to current observable behavior, interactions, accessibility, or data contracts.
+- When fixing production code, cannot break user-confirmed UI, behavior, or architecture boundaries to satisfy tests.
+- If unable to determine whether the test or implementation is wrong, must continue reading related implementation, tests, requirement records, or design docs; cannot proceed on guesswork.
 
 ## Gate Output Requirements
 
-在 Bug / Verification gate 中补充测试失败分流结论：
+Add test failure triage conclusion in Bug / Verification gate:
 
 ```text
 Test failure triage
-- 类型：测试契约过期 / 实现回归 / 需求变化未同步测试 / 环境 fixture
-- 证据：...
-- 修复方向：修测试 / 修实现 / 修 fixture
+- Type: stale test contract / implementation regression / requirement not synced / environment fixture
+- Evidence: ...
+- Fix direction: fix test / fix implementation / fix fixture
 ```
 
 ## Delivery Rule
 
-"测试还要同步""测试契约还没修""还有可跑的验证"不是剩余风险，而是可执行待办。
+"Tests still need syncing", "test contracts not yet fixed", "there are still runnable verifications" are not residual risk — they are actionable items.
 
-只要这类事项仍存在，禁止输出 `final closeout`。继续修复、验证，或在真实阻塞时说明阻塞。
+As long as such items exist, `final closeout` is forbidden. Continue fixing, verifying, or explain the real blocker.
 
 ## Examples
 
-Good：
+Good:
 
 ```text
 Test failure triage
-- 类型：测试契约过期
-- 证据：组件已改为分组入口 `.tool-entry`，测试仍查 `.action-card` 和 `topActions`
-- 修复方向：保留当前 UI，更新测试断言分组、入口、点击事件和 aria-label
+- Type: stale test contract
+- Evidence: component changed to grouped entry `.tool-entry`, test still queries `.action-card` and `topActions`
+- Fix direction: keep current UI, update test assertions for grouping, entry, click events, and aria-label
 ```
 
-Bad：
+Bad:
 
 ```text
-测试找不到 .action-card，所以把组件改回 .action-card。
+Test can't find .action-card, so revert component back to .action-card.
 ```

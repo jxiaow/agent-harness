@@ -1,8 +1,8 @@
 # Gates
 
-本目录承载执行过程中的阶段 gate。
+This directory contains stage gates for the execution process.
 
-当前核心 gate：
+Current core gates:
 
 - Requirement
 - Design
@@ -11,6 +11,6 @@
 - Delivery
 - Git
 
-只有当前 gate 的最小条件满足后，agent 才应进入下一阶段。gate 通过后自动进入下一阶段，不等待确认。
+The agent should only proceed to the next stage after the current gate's minimum conditions are met. Once a gate passes, automatically proceed to the next stage without waiting for confirmation.
 
-执行顺序：Requirement → Design → Implementation → Verification → Delivery → Git
+Execution order: Requirement → Design → Implementation → Verification → Delivery → Git

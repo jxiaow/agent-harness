@@ -2,94 +2,94 @@
 
 ## Goal
 
-约束 agent 在完成开发任务后提交代码的最小规范，避免糟糕的提交质量、夹带无关改动或泄露敏感信息。
+Constrain the minimum standards for committing code after completing a development task, avoiding poor commit quality, unrelated changes, or leaked sensitive information.
 
-这个阶段关注的是"代码如何进入版本控制"，而不是代码本身的质量（那是 implementation gate 和 verification gate 的事）。
+This stage focuses on "how code enters version control", not code quality itself (that is the job of implementation gate and verification gate).
 
 ## When To Use
 
-只有用户明确要求提交、创建分支或准备 PR 时才进入 Git gate。普通代码修改完成后，只需要在 Delivery gate 说明改动范围和验证结果。
+Only enter Git gate when the user explicitly requests a commit, branch creation, or PR preparation. After normal code changes are complete, just state the change scope and verification results in the Delivery gate.
 
 ## Must Check
 
-### 提交前自查
+### Pre-commit self-check
 
-- 相关 lint/test 是否通过（或有明确的未执行原因）
-- `git diff --stat` 确认改动范围，是否夹带无关文件
-- 是否有临时文件、日志文件、本地配置文件混入
-- 是否有 `.env`、`credentials`、`*.pem` 等敏感文件
+- Have relevant lint/tests passed (or is there a clear reason for not running them)
+- `git diff --stat` to confirm change scope; are unrelated files included
+- Are there temp files, log files, or local config files mixed in
+- Are there `.env`, `credentials`, `*.pem` or other sensitive files
 
-### 提交信息规范
+### Commit message format
 
-- 格式：`<type>: <message>`
-  - `feat`: 新功能
-  - `fix`: Bug 修复
-  - `refactor`: 重构（不改外部行为）
-  - `docs`: 文档更新
-  - `chore`: 构建/工具链配置
-  - `style`: 代码格式调整（不影响逻辑）
-  - `perf`: 性能优化
-  - `test`: 测试新增或修改
-- message 必须是有意义的描述，不要只写 `fix: bug` 或 `update: files`
-- 如果改动较复杂，提交 body 应补充说明：
-  - 为什么做这个改动
-  - 影响了哪些模块
-  - 是否有破坏性变更
+- Format: `<type>: <message>`
+  - `feat`: new feature
+  - `fix`: bug fix
+  - `refactor`: refactoring (no external behavior change)
+  - `docs`: documentation update
+  - `chore`: build/toolchain configuration
+  - `style`: code formatting (no logic change)
+  - `perf`: performance optimization
+  - `test`: test addition or modification
+- Message must be a meaningful description; do not just write `fix: bug` or `update: files`
+- For complex changes, the commit body should explain:
+  - Why this change was made
+  - Which modules are affected
+  - Whether there are breaking changes
 
-### 提交粒度
+### Commit granularity
 
-- 多个无关改动必须拆分多次提交，不要混成一个
-- 代码格式调整和逻辑修改必须分开提交
-- 重构和功能新增必须分开提交
-- 文档更新和业务逻辑修改建议分开提交
+- Multiple unrelated changes must be split into separate commits
+- Code formatting and logic changes must be committed separately
+- Refactoring and new features must be committed separately
+- Documentation updates and business logic changes should be committed separately
 
-### 不提交的内容
+### Do not commit
 
-- `.env`、`credentials`、`*.pem`、`*.key`
+- `.env`, `credentials`, `*.pem`, `*.key`
 - `node_modules/`
-- `*.log`、日志目录
-- IDE 配置文件（`.idea/`、`.vscode/` 除非团队约定共享）
-- 临时文件、调试输出
-- 应用运行日志目录
-- 数据库或本地持久化数据文件
-- 构建产物（除非明确要求提交 dist）
+- `*.log`, log directories
+- IDE config files (`.idea/`, `.vscode/` unless team convention to share)
+- Temp files, debug output
+- Application runtime log directories
+- Database or local persistence data files
+- Build artifacts (unless explicitly required to commit dist)
 
-### 分支规范
+### Branch naming
 
-- 分支命名：`feature/<name>`、`fix/<name>`、`refactor/<name>`
-- 分支名使用 kebab-case，不用下划线或驼峰
-- 分支名应反映任务内容，如 `feature/host-search`、`fix/deploy-timeout`
-- 不要直接在 master/main 上提交
+- Branch naming: `feature/<name>`, `fix/<name>`, `refactor/<name>`
+- Use kebab-case, not underscores or camelCase
+- Branch name should reflect task content, e.g. `feature/host-search`, `fix/deploy-timeout`
+- Do not commit directly to master/main
 
 ## Workflow
 
-### 标准流程
+### Standard flow
 
 ```bash
-# 1. 确认改动范围
+# 1. Confirm change scope
 git status
 git diff --stat
 
-# 2. 自查（按任务选择最小相关命令）
+# 2. Self-check (choose minimal relevant command for the task)
 npm run lint
 
-# 3. 提交（用户执行或 agent 根据指示执行）
+# 3. Commit (user executes or agent follows instructions)
 git add <files>
 git commit -m "<type>: <message>"
 
-# 4. 确认提交干净
+# 4. Confirm clean commit
 git status
 git log -1
 ```
 
-### 多改动拆分
+### Splitting multiple changes
 
 ```bash
-# 先提交逻辑修改
+# Commit logic changes first
 git add <route-files> <service-files>
 git commit -m "feat: add host search API"
 
-# 再提交格式调整（如需要）
+# Then commit formatting (if needed)
 git add <component-files>
 git commit -m "style: format search components"
 ```
@@ -131,20 +131,20 @@ feat add search
 
 ## Gate Pass Criteria
 
-以下全部满足后，才可视为通过 Git Gate：
+All of the following must be met to pass Git Gate:
 
-- [ ] 没有提交敏感文件或无关文件
-- [ ] 提交信息格式正确且有意义
-- [ ] 提交粒度合理（无关改动已拆分）
-- [ ] 工作目录干净（`git status` 无意外未跟踪文件）
-- [ ] 分支命名符合规范（如已创建新分支）
+- [ ] No sensitive or unrelated files committed
+- [ ] Commit message format is correct and meaningful
+- [ ] Commit granularity is reasonable (unrelated changes split)
+- [ ] Working directory is clean (`git status` shows no unexpected untracked files)
+- [ ] Branch naming follows convention (if a new branch was created)
 
 ## Recommended Output
 
 ```text
 Git gate
-- 范围：...
-- 检查：...
-- 提交信息：...
-- 排除：...
+- Scope: ...
+- Checks: ...
+- Commit message: ...
+- Excluded: ...
 ```

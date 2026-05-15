@@ -1,27 +1,27 @@
-# 验证矩阵
+# Verification Matrix
 
-> 状态日期：YYYY-MM-DD
+> Status date: YYYY-MM-DD
 
-本文件记录当前事项的验证方式、结果和缺口。
+This file records verification methods, results, and gaps for the current initiative.
 
-## 验证级别
+## Verification Levels
 
-| 级别      | 含义                     |
-| --------- | ------------------------ |
-| `format`  | 格式检查                 |
-| `lint`    | 静态规则检查             |
-| `compile` | 编译或语法级检查         |
-| `test`    | 单元测试 / contract 测试 |
-| `smoke`   | 手工或半自动关键路径验证 |
-| `real`    | 真实环境 / 真实设备联调  |
+| Level     | Meaning                              |
+| --------- | ------------------------------------ |
+| `format`  | Format check                         |
+| `lint`    | Static rule check                    |
+| `compile` | Compilation or syntax-level check    |
+| `test`    | Unit test / contract test            |
+| `smoke`   | Manual or semi-automated critical path verification |
+| `real`    | Real environment / real device integration |
 
-## 当前记录
+## Current Records
 
-| 工作包  | 范围 | 级别     | 命令 / 方式 | 结果 | 未覆盖项         |
-| ------- | ---- | -------- | ----------- | ---- | ---------------- |
-| INIT-01 | ...  | `format` | ...         | ...  | 未覆盖运行时行为 |
+| Work package | Scope | Level    | Command / Method | Result | Uncovered items          |
+| ------------ | ----- | -------- | ---------------- | ------ | ------------------------ |
+| INIT-01      | ...   | `format` | ...              | ...    | Runtime behavior not covered |
 
-## 当前验证结论
+## Current Verification Conclusion
 
-- 当前最强验证：...
-- 当前最大缺口：...
+- Strongest verification so far: ...
+- Biggest gap: ...

@@ -1,33 +1,33 @@
-# 执行板
+# Execution Board
 
-> 状态日期：YYYY-MM-DD
+> Status date: YYYY-MM-DD
 
-本文件是当前事项的唯一 backlog 与状态事实来源。
+This file is the single source of truth for the current initiative's backlog and status.
 
-## 使用规则
+## Usage Rules
 
-- 每次只推进一个工作包到可关闭状态
-- 工作包必须有固定 `ID`
-- 状态只使用：`todo` / `in_progress` / `done` / `blocked` / `deferred`
-- 完成后必须同步更新 [验证矩阵](./initiative-matrix.md)
-- 若产生新的架构结论、暂缓项或重开条件，必须同步更新 [决策记录](./initiative-decisions.md)
+- Only advance one work package to closeable state at a time
+- Work packages must have a fixed `ID`
+- Status values: `todo` / `in_progress` / `done` / `blocked` / `deferred`
+- After completion, must sync [Verification Matrix](./initiative-matrix.md)
+- If new architectural conclusions, deferred items, or reopen conditions arise, must sync [Decision Log](./initiative-decisions.md)
 
-## 当前执行顺序
+## Current Execution Order
 
 1. INIT-01
 2. INIT-02
 
-## 工作包
+## Work Packages
 
-| ID      | 优先级 | 状态        | 目标 | 范围 | 风险 | 完成标准 | 前置依赖 | 下一步 |
-| ------- | ------ | ----------- | ---- | ---- | ---- | -------- | -------- | ------ |
-| INIT-01 | P1     | in_progress | ...  | ...  | 中   | ...      | 无       | ...    |
-| INIT-02 | P2     | todo        | ...  | ...  | 中   | ...      | INIT-01  | ...    |
+| ID      | Priority | Status      | Goal | Scope | Risk   | Completion criteria | Dependencies | Next step |
+| ------- | -------- | ----------- | ---- | ----- | ------ | ------------------- | ------------ | --------- |
+| INIT-01 | P1       | in_progress | ...  | ...   | medium | ...                 | none         | ...       |
+| INIT-02 | P2       | todo        | ...  | ...   | medium | ...                 | INIT-01      | ...       |
 
-## 当前工作包说明
+## Current Work Package Details
 
 ### INIT-01
 
-- 目标：...
-- 本轮不做：...
-- 当前进展：...
+- Goal: ...
+- Not doing this round: ...
+- Current progress: ...

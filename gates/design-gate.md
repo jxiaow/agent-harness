@@ -2,63 +2,63 @@
 
 ## Goal
 
-先确定落点、边界和风险，再开始写实现。
+Determine the change point, boundaries, and risks before writing implementation.
 
 ## Minimal Fields
 
-默认使用多行短列表，最多写这 6 项：
+Use multi-line short lists by default, up to 6 items:
 
-- 改动落点
-- 方案选择
-- 为什么这样做
-- 改动边界
-- 主要风险
-- 验证思路
+- Change point
+- Approach choice
+- Rationale
+- Change boundary
+- Main risk
+- Verification approach
 
 ## Only Add When Relevant
 
-- 高风险入口：为什么必须改这里，而不是更局部
-- 跨模块：通信链怎么走（API / IPC / Store）
-- UI：是否涉及主题、CSS 变量、现有组件模式
-- Bug：修复点为什么打到根因
+- High-risk entry: why this specific location must be changed, rather than something more local
+- Cross-module: how the communication chain works (API / IPC / Store)
+- UI: whether it involves themes, CSS variables, existing component patterns
+- Bug: why the fix targets the root cause
 
 ## Recommended Output
 
 ```text
 Design gate
-- 改动落点：...
-- 方案选择：...
-- 为什么这样做：...
-- 改动边界：...
-- 主要风险：...
-- 验证思路：...
+- Change point: ...
+- Approach: ...
+- Rationale: ...
+- Boundary: ...
+- Main risk: ...
+- Verification approach: ...
 ```
 
-默认要求：
+Default requirements:
 
-- 简单任务可以压缩字段数量，但不要把多个字段用分号挤在一行
-- 与其他 gate 同时输出时，当前 gate 前后必须换行分隔
-- 复杂任务优先 4-6 行短列表
-- 不因压缩省略关键风险或验证思路
-- 只保留决策和边界
-- 不写实现流水账
+- Simple tasks may reduce field count, but do not cram multiple fields into one line with semicolons
+- When output alongside other gates, separate with blank lines before and after
+- Complex tasks prefer 4-6 line short lists
+- Do not omit critical risks or verification approach for brevity
+- Only keep decisions and boundaries
+- Do not write implementation play-by-play
 
 ## Good / Bad
 
-Good：
+Good:
 
 ```text
 Design gate
-- 改动落点：DeploymentStatus scoped CSS
-- 方案选择：复用现有 CSS 变量，调整 flex-wrap 和 min-width
-- 改动边界：不改组件 props、store 或状态枚举
-- 主要风险：长文本仍可能挤压操作区
-- 验证思路：检查窄屏、长项目名和多状态组合
+- Change point: DeploymentStatus scoped CSS
+- Approach: reuse existing CSS variables, adjust flex-wrap and min-width
+- Boundary: do not change component props, store, or state enums
+- Main risk: long text may still squeeze the action area
+- Verification approach: check narrow screen, long project names, and multi-state combinations
 ```
 
-Bad：
+Bad:
 
 ```text
 Design gate
-- 先改改看，不行再说。
+- Try changing it first, adjust later if needed.
 ```

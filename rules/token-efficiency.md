@@ -2,64 +2,64 @@
 
 ## Goal
 
-在不降低结论质量的前提下，控制 agent 的上下文和命令输出体积，避免流程本身造成高 token 消耗。
+Control agent context and command output volume without reducing conclusion quality; prevent the process itself from causing high token consumption.
 
 ## Default Rules
 
-1. 搜索默认限制范围，并排除构建产物目录：
+1. Searches default to limited scope, excluding build artifact directories:
    - `target/**`
    - `node_modules/**`
    - `dist/**`
-2. 优先对目标路径执行命令，不做全仓扫描。
-3. `git status` 默认带路径参数，只看本次任务相关文件。
-4. 文件读取采用"定位 + 窗口"模式：
-   - 先 `rg -n` 定位行号
-   - 再 `sed -n 'start,endp'` 读取片段
-5. 长输出先截断再决策：
+2. Prefer running commands on target paths; do not scan the entire repo.
+3. `git status` defaults to path parameters, only checking files relevant to the current task.
+4. File reading uses "locate + window" mode:
+   - First `rg -n` to locate line numbers
+   - Then `sed -n 'start,endp'` to read the fragment
+5. Truncate long output before making decisions:
    - `head -n`
    - `tail -n`
-6. 避免重复读取同一大文件；如需复查，优先复用已有定位结果。
-7. gate 输出保持紧凑标签行，不重复历史结论和模板原文。
-8. 自动化检查默认跑"当前变更集"，不要把历史存量作为日常默认扫描对象。
-9. 命令输出只保留决策所需摘要；若问题很多，先输出数量、规则名和前几个位置。
+6. Avoid re-reading the same large file; prefer reusing existing location results when rechecking.
+7. Gate output stays compact; do not repeat historical conclusions or template text.
+8. Automation checks default to "current changeset"; do not scan historical backlog as a daily default.
+9. Command output retains only the summary needed for decisions; if many issues exist, first output count, rule names, and first few locations.
 
 ## Automation Cost Budget
 
-自动化按成本分层执行，默认从低成本开始：
+Automation executes in cost tiers, starting from lowest cost by default:
 
-| Level      | 默认用途                 | 命令示例                                                                              | Token 策略                            |
-| ---------- | ------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------- |
-| `light`    | 日常开发、agent 每轮收口 | `node harness/core/automation/check-process.js --changed --summary --max-issues 3` | 只扫当前变更的流程文档                |
-| `targeted` | 具体模块验证             | `node harness/core/automation/check-process.js --summary --max-issues 3 <path>`    | 只传相关文件或目录，不扩到全仓        |
-| `full`     | 阶段收口、CI、迁移完成前 | `npm run lint` / 全量测试                                                             | 只在 Verification gate 说明原因后运行 |
+| Level      | Default use                    | Command example                                                                       | Token strategy                                    |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `light`    | Daily dev, agent per-turn wrap | `node harness/core/automation/check-process.js --changed --summary --max-issues 3`    | Only scan changed process docs                    |
+| `targeted` | Specific module verification   | `node harness/core/automation/check-process.js --summary --max-issues 3 <path>`       | Only pass relevant files/dirs, not full repo      |
+| `full`     | Stage closeout, CI, pre-migration | `npm run lint` / full test suite                                                   | Only run when Verification gate explains why      |
 
-默认选择：
+Default choices:
 
-1. 本轮只改流程文档或 harness core：先跑 `node harness/core/automation/check-process.js --changed --summary --max-issues 3`
-2. 本轮新增入口、路由、页面、命令或导出：跑项目 adapter 提供的入口检查，或用 `node harness/core/automation/check-process.js --summary --max-issues 3 <path>` 检查相关流程文件
-3. 准备阶段收口或高风险入口改动：再追加 lint / 单测 / 构建
+1. Only changed process docs or harness core this turn: run `node harness/core/automation/check-process.js --changed --summary --max-issues 3`
+2. Added new entry points, routes, pages, commands, or exports: run project entry checks or `node harness/core/automation/check-process.js --summary --max-issues 3 <path>`
+3. Preparing stage closeout or high-risk entry changes: add lint / unit tests / build
 
-不要为了"更保险"默认跑全量测试；只有当当前结论依赖全量结果时才跑。
+Do not run full test suites "for safety"; only when the current conclusion depends on full results.
 
 ## Output Budget
 
-- 运行检查时，默认只在最终回复写命令和结果，不粘贴完整 stdout。
-- 检查失败时，最多列 3-5 个代表性问题；其余用数量汇总。
-- 需要完整定位信息时，优先读取检查生成的 `.tmp/harness-check-report.json`，不要把完整问题列表粘进对话。
-- 长输出需要继续分析时，先保存或定位，再读取相关窗口。
-- 若某个检查会扫描 50 个以上文件，优先说明扫描范围和为什么必要。
+- When running checks, only write the command and result in the final reply; do not paste full stdout.
+- On check failure, list at most 3-5 representative issues; summarize the rest by count.
+- When full location info is needed, prefer reading `.tmp/harness-check-report.json`; do not paste the full issue list into the conversation.
+- When long output needs further analysis, save or locate first, then read the relevant window.
+- If a check would scan 50+ files, first explain the scan scope and why it is necessary.
 
 ## Command Patterns
 
-- 搜索：
+- Search:
   - `rg -n "pattern" <target-dir> --glob '!target/**' --glob '!node_modules/**' --glob '!dist/**'`
-- 文件列表：
+- File listing:
   - `rg --files <target-dir> --glob '!target/**' --glob '!node_modules/**' --glob '!dist/**'`
-- 状态：
+- Status:
   - `git status --short -- <path-a> <path-b>`
 
 ## Verification Expectation
 
-- 验证命令同样遵守最小范围原则，只跑当前改动相关检查。
-- 若必须运行大范围检查，需要在 Verification gate 说明原因和范围。
-- 不能把 harness 流程检查的通过描述成业务测试通过；它只证明流程文档和已接入的项目检查通过。
+- Verification commands also follow the minimum scope principle; only run checks relevant to current changes.
+- If a broad-scope check must be run, explain the reason and scope in Verification gate.
+- Harness process check passing cannot be described as business test passing; it only proves process docs and connected project checks pass.

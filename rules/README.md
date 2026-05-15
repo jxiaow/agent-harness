@@ -1,10 +1,10 @@
 # Core Rules
 
-通用规则，可随 `harness/core/` 迁移到任何仓库。不含项目路径或技术栈假设。
+Generic rules that travel with `harness/core/` to any repository. No project paths or tech stack assumptions.
 
-| 文件 | 用途 |
+| File | Purpose |
 | --- | --- |
-| `token-efficiency.md` | 控制 agent token 消耗 |
-| `test-failure-triage.md` | 测试失败时判定修复方向 |
+| `token-efficiency.md` | Control agent token consumption |
+| `test-failure-triage.md` | Determine fix direction on test failure |
 
-项目专属规则放在 `harness/project/rules/`。
+Project-specific rules go in `harness/project/rules/`.

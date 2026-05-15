@@ -2,86 +2,86 @@
 
 ## Goal
 
-控制 UI 调整范围，确保视觉、交互和主题适配不漏项。
+Control UI adjustment scope, ensuring visual, interaction, and theme adaptation are complete.
 
 ## Minimal Analysis
 
-默认只补这 5 项：
+Only add these 5 items by default:
 
-- 调整类型
-- 影响页面/组件
-- 主要改动
-- 验证方式
-- 剩余风险
+- Adjustment type
+- Affected pages/components
+- Main changes
+- Verification method
+- Residual risk
 
 ## Design Approval Gate
 
-以下情况必须在 Design gate 后暂停，先生成可预览的 HTML UI 设计稿，并让用户确认方案；确认前禁止进入业务实现：
+The following situations require pausing after Design gate to generate a previewable HTML UI mockup for user confirmation; business implementation is forbidden before confirmation:
 
-- 用户要求“重新设计 UI / 重做界面 / 整体改版 / 视觉方案”
-- 改动会影响页面信息架构、核心布局、视觉风格或多个核心页面
-- 需要在多个可行视觉方向中做取舍
-- 需要用户判断“改成什么样子”是否符合预期
+- User requests "redesign UI / redo interface / full overhaul / visual direction"
+- Changes affect page information architecture, core layout, visual style, or multiple core pages
+- Multiple viable visual directions require trade-off decisions
+- User judgment is needed on whether "what it looks like" meets expectations
 
-Design gate 至少要给出：
+Design gate must at minimum provide:
 
-- 目标页面和每个页面的布局方案
-- 核心视觉方向（密度、色彩、卡片/表格/日志等形态）
-- 关键交互状态（hover / active / focus / empty / loading）
-- 响应式处理方式
-- HTML UI 设计稿路径和预览方式
-- 明确询问用户是否按该 HTML 设计稿实现
+- Target pages and layout approach for each
+- Core visual direction (density, color, card/table/log form factors)
+- Key interaction states (hover / active / focus / empty / loading)
+- Responsive handling approach
+- HTML mockup path and preview method
+- Explicit question asking user whether to implement per the HTML mockup
 
-HTML UI 设计稿要求：
+HTML mockup requirements:
 
-- 放在 `docs/operations/<initiative>/` 或用户指定的运行态目录中
-- 使用单个可直接打开的 `.html` 文件表达页面结构、核心视觉和关键状态
-- 覆盖桌面和移动端主要布局；必要时在同一 HTML 中给出多状态区块
-- 使用项目设计系统和 CSS 变量思路，不引入与目标项目无关的视觉体系
-- 设计稿是确认材料，不替代最终业务代码实现
+- Place in `docs/operations/<initiative>/` or user-specified operations directory
+- Use a single directly-openable `.html` file expressing page structure, core visuals, and key states
+- Cover desktop and mobile main layouts; use multi-state blocks in the same HTML when necessary
+- Use the project's design system and CSS variable approach; do not introduce visual systems unrelated to the target project
+- The mockup is confirmation material, not a replacement for final business code implementation
 
-以下情况不需要暂停确认，可按 Autopilot 继续：
+The following situations do NOT require pausing; proceed with Autopilot:
 
-- 单个颜色、间距、文案、图标、对齐等明确样式修复
-- 用户已给出足够具体的设计稿、截图或实现要求
-- 用户明确说“直接实现 / 不需要确认 / 按你的方案做”
+- Single color, spacing, copy, icon, alignment, or other clear style fixes
+- User has provided sufficiently specific mockups, screenshots, or implementation requirements
+- User explicitly says "just implement / no confirmation needed / go with your approach"
 
 ## Required References
 
-- UI 设计、视觉重构、组件样式调整前，必须先参考 `docs/design/design-system.md`
-- 主题变量和状态样式继续按 `harness/project/rules/theme-patterns.md` 执行
+- Before UI design, visual refactoring, or component style adjustments, always reference `docs/design/design-system.md`
+- Theme variables and state styles follow `harness/project/rules/theme-patterns.md`
 
-## Design System Sync（自动触发）
+## Design System Sync (auto-triggered)
 
-当 UI 调整涉及以下任一情况时，**必须**在 Delivery gate 前同步更新 `docs/design/` 下对应的设计系统分篇：
+When UI adjustments involve any of the following, the corresponding design system section under `docs/design/` **must** be synced before Delivery gate:
 
-| 触发条件 | 同步目标 |
+| Trigger | Sync target |
 | --- | --- |
-| 修改公共组件（`BaseSelect`、`BaseButton`、`BaseModal` 等）的交互或视觉规范 | `design-system-controls.md` |
-| 新增/修改布局模式、间距规则 | `design-system-layout.md` |
-| 新增/修改反馈组件（Toast、Alert、Loading 等）行为 | `design-system-feedback.md` |
-| 新增/修改表单控件行为或状态 | `design-system-forms.md` 或 `design-system-controls.md` |
-| 新增/修改主题变量 | `design-system-foundations.md` + `variables.css` |
+| Modifying public component (BaseSelect, BaseButton, BaseModal, etc.) interaction or visual spec | `design-system-controls.md` |
+| Adding/modifying layout patterns or spacing rules | `design-system-layout.md` |
+| Adding/modifying feedback component (Toast, Alert, Loading, etc.) behavior | `design-system-feedback.md` |
+| Adding/modifying form control behavior or states | `design-system-forms.md` or `design-system-controls.md` |
+| Adding/modifying theme variables | `design-system-foundations.md` + `variables.css` |
 
-规则：
+Rules:
 
-- 同步是实现的一部分，不是可选的后续动作。
-- 只更新受影响的条目，不重写整篇文档。
-- Delivery gate 中必须列出同步了哪些设计系统文件；未同步时说明原因。
+- Sync is part of implementation, not an optional follow-up.
+- Only update affected entries; do not rewrite the entire document.
+- Delivery gate must list which design system files were synced; explain if not synced.
 
 ## Only Add When Relevant
 
-- 涉及主题：补 light / dark
-- 涉及布局：补响应式
-- 涉及交互：补 hover / active / disabled / focus
-- 涉及公共组件：说明是局部微调还是公共样式变化
+- Involves theme: add light / dark
+- Involves layout: add responsiveness
+- Involves interaction: add hover / active / disabled / focus
+- Involves public components: clarify whether it is a local tweak or a public style change
 
 ## Recommended Output
 
 ```text
 UI gate
-- 类型：...
-- 影响：...
-- 改动：...
-- 验证：...
+- Type: ...
+- Affected: ...
+- Changes: ...
+- Verification: ...
 ```

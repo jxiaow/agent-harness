@@ -2,64 +2,64 @@
 
 ## Goal
 
-先说清楚这次到底要解决什么，再进入设计或实现。
+Clarify what this task is actually solving before entering design or implementation.
 
 ## Minimal Fields
 
-默认使用多行短列表，最多写这 6 项：
+Use multi-line short lists by default, up to 6 items:
 
-- 任务类型
-- 目标问题
-- 成功标准
-- 影响范围
-- 非目标范围
-- 特殊约束
+- Task type
+- Target problem
+- Success criteria
+- Impact scope
+- Out of scope
+- Special constraints
 
 ## Only Add When Relevant
 
-- Bug：现象、期望行为、复现条件、环境
-- 新功能：面向谁、入口在哪、是新增/替换/增强
-- 重构：外部行为是否保持不变、主要痛点是什么
-- 其他：先判断最接近哪个模板
+- Bug: symptom, expected behavior, reproduction steps, environment
+- New feature: target user, entry point, is it new/replacement/enhancement
+- Refactor: does external behavior remain unchanged, what is the main pain point
+- Other: determine which template is closest
 
 ## Recommended Output
 
 ```text
 Requirement gate
-- 任务类型：...
-- 目标问题：...
-- 成功标准：...
-- 影响范围：...
-- 非目标范围：...
-- 特殊约束：...
+- Task type: ...
+- Target problem: ...
+- Success criteria: ...
+- Impact scope: ...
+- Out of scope: ...
+- Special constraints: ...
 ```
 
-默认要求：
+Default requirements:
 
-- 简单任务可以压缩字段数量，但不要把多个字段用分号挤在一行
-- 如果同时声明任务类型，任务类型必须单独成行，不能和 gate 标题挤在一行
-- 与其他 gate 同时输出时，当前 gate 前后必须换行分隔
-- 复杂任务优先 4-6 行短列表
-- 不因压缩省略关键边界
-- 只写当前任务需要的边界
-- 不复述模板说明或常识背景
+- Simple tasks may reduce field count, but do not cram multiple fields into one line with semicolons
+- If declaring task type simultaneously, task type must be on its own line, not crammed with the gate heading
+- When output alongside other gates, separate with blank lines before and after
+- Complex tasks prefer 4-6 line short lists
+- Do not omit critical boundaries for brevity
+- Only write boundaries needed for the current task
+- Do not restate template instructions or common knowledge
 
 ## Good / Bad
 
-Good：
+Good:
 
 ```text
 Requirement gate
-- 任务类型：UI 调整
-- 目标问题：部署状态标签在窄屏下换行挤压
-- 成功标准：标签可读、不遮挡按钮
-- 影响范围：DeploymentStatus 组件样式
-- 非目标范围：不改状态计算逻辑
+- Task type: UI adjustment
+- Target problem: deployment status label wraps and squeezes on narrow screens
+- Success criteria: label readable, does not obscure buttons
+- Impact scope: DeploymentStatus component styles
+- Out of scope: do not change status calculation logic
 ```
 
-Bad：
+Bad:
 
 ```text
 Requirement gate
-- 调整一下样式，应该很简单，直接改 CSS。
+- Adjust some styles, should be simple, just change CSS.
 ```

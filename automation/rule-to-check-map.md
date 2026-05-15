@@ -2,165 +2,165 @@
 
 ## Goal
 
-把 development process harness 中的规则按"可自动检查程度"分类，给后续工具化落地提供最小映射。
+Classify rules in the development process harness by "degree of automation feasibility", providing a minimal mapping for future tooling.
 
 ## Categories
 
 - `fully-automatable`
-  - 规则边界清楚，可直接用脚本或 ESLint 实现
+  - Clear rule boundaries; can be implemented directly with scripts or ESLint
 - `semi-automatable`
-  - 可自动发现疑点，但仍需人或 AI 判断
+  - Can automatically detect suspicious patterns, but still requires human or AI judgment
 - `human-ai-judgment`
-  - 依赖语义理解，不适合做强制自动卡口
+  - Depends on semantic understanding; not suitable for hard automated gates
 
 ## Current Mapping
 
-`Process` 行属于 harness core，默认随 `harness/core/` 迁移。项目入口、接口契约、样式、构建等规则属于 project adapter；迁移到其他仓库时应替换这些行和对应脚本。
+`Process` rows belong to harness core and migrate with `harness/core/` by default. Project entry, interface contract, style, and build rules belong to the project adapter; replace these rows and corresponding scripts when migrating to another repo.
 
-| Rule Area     | Example Rule                            | Type              | Notes                                                        |
-| ------------- | --------------------------------------- | ----------------- | ------------------------------------------------------------ |
-| Code Style    | 格式化规则                              | fully-automatable | 复用项目 formatter                                           |
-| Code Style    | 静态检查规则                            | fully-automatable | 复用项目 lint/typecheck                                      |
-| Entry Points  | 新能力已接入注册入口                    | semi-automatable  | 扫描项目定义的命令、导出、路由、插件或构建入口               |
-| Interfaces    | 公共接口未被意外删除或改名              | semi-automatable  | 扫描导出、命令、事件、配置或 schema 差异                     |
-| Data Access   | 上层不直接操作底层存储实现              | semi-automatable  | 扫描项目定义的边界和禁止依赖                                 |
-| Error Model   | 错误返回或退出码使用统一模型            | semi-automatable  | 扫描手写错误响应、退出码或异常模式                           |
-| Style System  | 样式不绕过项目 token                    | semi-automatable  | 仅适用于有 UI/样式系统的项目                                 |
-| Build         | 新文件已接入构建或发布入口              | semi-automatable  | 需文件差异扫描                                               |
-| Architecture  | 禁止反向依赖                            | human-ai-judgment | 需人工判断依赖方向                                           |
-| Communication | 通信方式选择                            | human-ai-judgment | 需人工判断                                                   |
-| Requirement   | 需求边界是否清楚                        | human-ai-judgment | 依赖上下文理解                                               |
-| Design        | 方案是否合理                            | human-ai-judgment | 依赖架构权衡                                                 |
-| Verification  | 验证是否充分                            | human-ai-judgment | 依赖任务语义                                                 |
-| Process       | `in_progress` 阶段禁止 `final closeout` | semi-automatable  | 扫描执行板状态与交付文本关键字                               |
-| Process       | 未完成时必须有下一动作或阻塞说明        | semi-automatable  | 扫描执行板的 `next action`/`block reason` 字段               |
-| Process       | 收口必须带证据锚点                      | semi-automatable  | 扫描结果 / 验证命令 / 未验证项 / 风险                        |
-| Process       | 非阻塞下一步不能写进 final closeout     | semi-automatable  | 扫描 final closeout 中的下一步建议                           |
-| Process       | 下一步不能成为 final closeout 必填项    | semi-automatable  | 扫描把下一步写成收口必填字段的表述                           |
-| Process       | 无真实风险时禁止输出风险样板话          | semi-automatable  | 扫描未验证项和风险的空值组合                                 |
-| Process       | 任务类型和多个 gate 输出必须换行分隔    | semi-automatable  | 扫描同一行出现任务类型 + gate 或多个 gate 标记               |
-| Process       | 进行中默认维护 checklist                | semi-automatable  | 扫描 checklist 更新与收口时机                                |
-| Process       | 长周期任务先写阶段级 todo 和执行顺序    | semi-automatable  | 扫描阶段计划 / 顺序字段 / 当前阶段锚点                       |
-| Docs          | 运行态文档不混放到 development          | semi-automatable  | 扫描执行板/矩阵/决策类文档所在目录                           |
-| Git           | 提交信息格式正确                        | semi-automatable  | 正则匹配 `<type>: <message>` 格式                            |
-| Git           | 不提交敏感文件                          | semi-automatable  | 扫描 `.env`, `credentials`, `*.pem`                          |
-| Git           | 不提交无关文件                          | semi-automatable  | 扫描 `*.log`, `node_modules/`, 临时文件                      |
-| Git           | 分支命名符合规范                        | semi-automatable  | 正则匹配 `feature/<name>`、`fix/<name>` 或 `refactor/<name>` |
-| Git           | 提交粒度合理                            | human-ai-judgment | 需判断改动是否相关                                           |
-| Git           | 提交信息有意义                          | human-ai-judgment | 需语义理解判断 message 质量                                  |
+| Rule Area     | Example Rule                                    | Type              | Notes                                                        |
+| ------------- | ----------------------------------------------- | ----------------- | ------------------------------------------------------------ |
+| Code Style    | Formatting rules                                | fully-automatable | Reuse project formatter                                      |
+| Code Style    | Static analysis rules                           | fully-automatable | Reuse project lint/typecheck                                 |
+| Entry Points  | New capability registered at entry point        | semi-automatable  | Scan project-defined commands, exports, routes, plugins, or build entries |
+| Interfaces    | Public interface not accidentally deleted/renamed| semi-automatable  | Scan exports, commands, events, config, or schema diffs      |
+| Data Access   | Upper layer does not directly operate lower storage | semi-automatable | Scan project-defined boundaries and forbidden dependencies   |
+| Error Model   | Errors use unified model                        | semi-automatable  | Scan hand-written error responses, exit codes, or exception patterns |
+| Style System  | Styles do not bypass project tokens             | semi-automatable  | Only for projects with UI/style systems                      |
+| Build         | New files wired into build or publish entry     | semi-automatable  | Requires file diff scanning                                  |
+| Architecture  | No reverse dependencies                         | human-ai-judgment | Requires human judgment on dependency direction              |
+| Communication | Communication method selection                  | human-ai-judgment | Requires human judgment                                      |
+| Requirement   | Requirement boundary clarity                    | human-ai-judgment | Depends on context understanding                             |
+| Design        | Approach reasonableness                         | human-ai-judgment | Depends on architecture trade-offs                           |
+| Verification  | Verification sufficiency                        | human-ai-judgment | Depends on task semantics                                    |
+| Process       | `in_progress` forbids `final closeout`          | semi-automatable  | Scan board status and delivery text keywords                 |
+| Process       | Incomplete must have next action or blocker     | semi-automatable  | Scan board `next action`/`block reason` fields               |
+| Process       | Closeout must have evidence anchors             | semi-automatable  | Scan result / verification command / unverified / risk       |
+| Process       | Non-blocking next steps forbidden in closeout   | semi-automatable  | Scan next-step suggestions in final closeout                 |
+| Process       | Next steps cannot be required closeout fields   | semi-automatable  | Scan phrasing that makes next steps a required closeout field|
+| Process       | No boilerplate risk when no real risk exists    | semi-automatable  | Scan empty-value combinations of unverified + risk           |
+| Process       | Task type and gates must be on separate lines   | semi-automatable  | Scan same line for task type + gate or multiple gate markers |
+| Process       | In-progress defaults to maintaining checklist   | semi-automatable  | Scan checklist updates and closeout timing                   |
+| Process       | Long-running tasks need stage todo and order    | semi-automatable  | Scan stage plan / order fields / current stage anchor        |
+| Docs          | Operations docs not mixed into development      | semi-automatable  | Scan board/matrix/decision docs location                     |
+| Git           | Commit message format correct                   | semi-automatable  | Regex match `<type>: <message>` format                       |
+| Git           | No sensitive files committed                    | semi-automatable  | Scan `.env`, `credentials`, `*.pem`                          |
+| Git           | No unrelated files committed                    | semi-automatable  | Scan `*.log`, `node_modules/`, temp files                    |
+| Git           | Branch naming follows convention                | semi-automatable  | Regex match `feature/<name>`, `fix/<name>`, `refactor/<name>`|
+| Git           | Commit granularity reasonable                   | human-ai-judgment | Requires judgment on change relatedness                      |
+| Git           | Commit message meaningful                       | human-ai-judgment | Requires semantic understanding of message quality           |
 
 ## Candidate Checks
 
 ### Fully Automatable
 
-- 项目 formatter 检查
-- 项目 lint/typecheck 检查
-- 新增文件是否加入对应入口或注册表
+- Project formatter check
+- Project lint/typecheck check
+- New files added to corresponding entry or registry
 
-上面这些检查默认都应支持排除：
+All above checks should support excluding:
 
 - `node_modules/`
-- 与当前 diff 无关的历史存量文件
+- Historical files unrelated to current diff
 
 ### Semi Automatable
 
-- 扫描跨模块改动是否同时触发多个高层目录修改
-- 扫描执行中状态是否缺少下一动作或阻塞说明
-- 扫描 `final closeout` 是否出现在 `in_progress` 状态下
-- 扫描 `final closeout` 是否包含结果、最近验证命令、未验证项和风险
-- 扫描 `final closeout` 是否夹带非阻塞下一步建议
-- 扫描文档是否把下一步写成 `final closeout` 必填项
-- 扫描 `final closeout` 是否用“无未验证项 + 无风险”凑样板
-- 扫描同一行是否出现任务类型 + gate 或多个 gate 输出标记
-- 扫描长周期任务是否先出现阶段级 todo/checklist 与顺序字段
-- 扫描运行态文档是否错误放在 `docs/development/`
-- 扫描新增文件是否接入项目定义的入口
-- 扫描上层模块是否直接依赖项目定义的底层实现
-- 扫描公共接口、命令、事件或配置是否被意外删除
-- 扫描错误响应、退出码或异常模型是否绕过项目统一模式
-- 扫描提交信息是否符合 `<type>: <message>` 格式
-- 扫描暂存区是否有 `.env`, `credentials`, `*.pem`, `*.key` 文件
-- 扫描暂存区是否有 `*.log`, `node_modules/`, 临时文件
-- 扫描分支名是否符合 `feature|fix|refactor/<name>` 格式
+- Scan cross-module changes for simultaneous modifications to multiple top-level directories
+- Scan in-progress status for missing next action or blocker explanation
+- Scan whether `final closeout` appears under `in_progress` status
+- Scan whether `final closeout` contains result, recent verification command, unverified items, and risk
+- Scan whether `final closeout` includes non-blocking next-step suggestions
+- Scan whether docs make next steps a required `final closeout` field
+- Scan whether `final closeout` uses "no unverified + no risk" boilerplate
+- Scan whether same line contains task type + gate or multiple gate output markers
+- Scan whether long-running tasks have stage-level todo/checklist and order fields first
+- Scan whether operations docs are incorrectly placed in `docs/development/`
+- Scan whether new files are wired into project-defined entries
+- Scan whether upper modules directly depend on project-defined lower implementations
+- Scan whether public interfaces, commands, events, or configs are accidentally deleted
+- Scan whether error responses, exit codes, or exception models bypass project unified patterns
+- Scan whether commit messages match `<type>: <message>` format
+- Scan whether staged area contains `.env`, `credentials`, `*.pem`, `*.key` files
+- Scan whether staged area contains `*.log`, `node_modules/`, temp files
+- Scan whether branch name matches `feature|fix|refactor/<name>` format
 
 ### Human / AI Judgment
 
-- 判断需求边界是否清晰
-- 判断设计方案是否符合既有模式
-- 判断验证覆盖是否足够
-- 判断重构是否真正改善边界
-- 判断跨模块改动是否破坏职责分层
-- 判断项目入口接入方式是否正确
-- 判断模块组织方式是否合理
-- 判断多个改动是否应该拆分提交（提交粒度）
-- 判断提交信息是否真正描述了改动内容（语义质量）
-- 判断是否应该创建新分支或在现有分支上继续
+- Judge whether requirement boundary is clear
+- Judge whether design approach fits existing patterns
+- Judge whether verification coverage is sufficient
+- Judge whether refactoring truly improves boundaries
+- Judge whether cross-module changes break responsibility layering
+- Judge whether project entry wiring is correct
+- Judge whether module organization is reasonable
+- Judge whether multiple changes should be split into separate commits (granularity)
+- Judge whether commit message truly describes the change (semantic quality)
+- Judge whether to create a new branch or continue on existing
 
 ## Automation Rollout
 
-自动化按低成本、低歧义、易遗漏的顺序落地。
+Automation lands in order of: low cost, low ambiguity, easily overlooked.
 
-默认成本策略：日常使用 `node harness/core/automation/check-process.js --changed --summary --max-issues 3`；只在阶段收口或高风险入口中扩大到全量 lint/test/build。
+Default cost strategy: daily use `node harness/core/automation/check-process.js --changed --summary --max-issues 3`; only expand to full lint/test/build at stage closeout or high-risk entries.
 
-显式目标：需要覆盖 git diff 之外的文件或目录时，运行 `node harness/core/automation/check-process.js --summary --max-issues 3 <path> [...]`。
+Explicit targets: when needing to cover files or directories beyond git diff, run `node harness/core/automation/check-process.js --summary --max-issues 3 <path> [...]`.
 
-输出预算：检查默认只展示前 5 个问题；需要更多时追加 `-- --max-issues <n>`。
+Output budget: checks display first 5 issues by default; append `--max-issues <n>` for more.
 
-摘要模式：批量失败时追加 `-- --summary`，只看各规则命中数量。
+Summary mode: on bulk failures, append `--summary` to see rule hit counts only.
 
-详细报告：默认失败详情写入 `.tmp/harness-check-report.json`，终端只保留摘要。
+Detailed report: failure details default to `.tmp/harness-check-report.json`; terminal keeps only summary.
 
 ### Phase 0: Process Checks
 
-这些检查最先落地，因为它们能直接降低 agent 误收口和跳步概率：
+These checks land first because they directly reduce agent false-closeout and step-skipping probability:
 
-当前入口：
+Current entry points:
 
-- 工作区：`npm run process:check -- --changed`
-- 暂存区：`npm run process:check -- --staged`
-- 全量文档：`npm run process:check`
+- Working tree: `npm run process:check -- --changed`
+- Staged: `npm run process:check -- --staged`
+- Full docs: `npm run process:check`
 
-1. `final closeout` 是否包含结果、最近验证命令、未验证项和风险
-2. `in_progress` 阶段是否错误输出 `final closeout`
-3. `final closeout` 是否夹带非阻塞下一步建议
-4. 文档是否把下一步写成 `final closeout` 必填项
-5. `final closeout` 是否用无风险样板话填充格式
-6. 同一行是否出现任务类型 + gate 或多个 gate 输出标记
-7. `long-running` 任务是否先出现阶段级 todo/checklist、执行顺序和当前工作包
-8. 运行态执行板、验证矩阵、决策记录是否误放到 `docs/development/`
+1. Does `final closeout` contain result, recent verification command, unverified items, and risk
+2. Does `in_progress` stage incorrectly output `final closeout`
+3. Does `final closeout` include non-blocking next-step suggestions
+4. Does documentation make next steps a required `final closeout` field
+5. Does `final closeout` use no-risk boilerplate to fill format
+6. Does same line contain task type + gate or multiple gate output markers
+7. Does `long-running` task have stage-level todo/checklist, execution order, and current work package first
+8. Are operations board, verification matrix, decision log incorrectly placed in `docs/development/`
 
 ### Phase 1: Project Entry Checks
 
-这些检查覆盖最容易遗漏的接入点：
+These checks cover the most commonly overlooked wiring points:
 
-当前入口由项目 adapter 定义。若 adapter 提供入口检查脚本，优先支持：
+Current entry points are defined by the project adapter. If the adapter provides entry check scripts, prefer supporting:
 
-- 工作区检查
-- 暂存区检查
-- 指定文件检查
+- Working tree check
+- Staged check
+- Specified file check
 
-1. 新增能力是否挂载到项目定义的入口或注册表
-2. 公共接口、命令、事件或配置是否保持兼容
-3. 上层模块是否绕过项目定义的边界直接依赖底层实现
-4. 错误响应、退出码或异常模型是否使用统一模式
-5. 样式 token 检查（仅适用于有 UI/样式系统的项目）
+1. Is new capability mounted at project-defined entry or registry
+2. Are public interfaces, commands, events, or configs kept compatible
+3. Does upper module bypass project-defined boundary to directly depend on lower implementation
+4. Do error responses, exit codes, or exception models use unified patterns
+5. Style token check (only for projects with UI/style systems)
 
 ### Phase 2: Existing Tooling
 
-这些检查优先复用已有工具，不重复造轮子：
+These checks prefer reusing existing tools; do not reinvent:
 
-1. 项目 lint/typecheck（如项目已有配置）
-2. Formatter / Markdown 格式检查（如项目已有配置）
-3. Git 提交信息和敏感文件扫描
+1. Project lint/typecheck (if project has config)
+2. Formatter / Markdown format check (if project has config)
+3. Git commit message and sensitive file scanning
 
-注意：
+Notes:
 
-- 不建议第一阶段把历史存量一次性做成全仓硬阻塞
-- 资源接入检查更适合先覆盖新增文件
+- Not recommended to make historical backlog a full-repo hard blocker in phase 1
+- Entry wiring checks are better suited to cover new files first
 
 ## Suggested Output Format
 
-后续工具化检查建议统一输出：
+Future tooling checks should use unified output:
 
 - `rule`
 - `severity`
@@ -170,10 +170,10 @@
 
 ## Principle
 
-自动化层的目标不是替代规则，而是先把：
+The automation layer's goal is not to replace rules, but to first turn the:
 
-- 最稳定
-- 最容易漏
-- 最低歧义
+- Most stable
+- Most easily overlooked
+- Lowest ambiguity
 
-的规则变成可重复执行的检查。
+rules into repeatable executable checks.

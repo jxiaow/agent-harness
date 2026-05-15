@@ -54,21 +54,21 @@ function parseArgs(argv) {
       options.help = true;
       continue;
     }
-    throw new Error(`未知参数：${value}`);
+    throw new Error(`Unknown argument：${value}`);
   }
 
   return options;
 }
 
 function printUsage() {
-  console.log('用法: node harness/core/export-open-source.js --target <dir>');
-  console.log('示例: node harness/core/export-open-source.js --target dist/agent-harness');
+  console.log('Usage: node harness/core/export-open-source.js --target <dir>');
+  console.log('Example: node harness/core/export-open-source.js --target dist/agent-harness');
 }
 
 function ensureSafeRelativePath(relativePath) {
   const segments = relativePath.split(/[\\/]/).filter(Boolean);
   if (segments.some(segment => blockedSegments.has(segment))) {
-    throw new Error(`公开导出禁止包含项目本地适配层：${relativePath}`);
+    throw new Error(`Public export must not include project-local adapter content：${relativePath}`);
   }
 }
 
@@ -113,7 +113,7 @@ function walkFiles(dir) {
 
 function exportOpenSource(options) {
   if (fs.existsSync(options.target)) {
-    throw new Error(`目标目录已存在，拒绝覆盖：${options.target}`);
+    throw new Error(`Target directory already exists, refusing to overwrite：${options.target}`);
   }
 
   for (const entry of includeEntries) {
@@ -124,7 +124,7 @@ function exportOpenSource(options) {
       continue;
     }
     if (!fs.existsSync(source)) {
-      throw new Error(`导出源不存在：${entry}`);
+      throw new Error(`Export source does not exist：${entry}`);
     }
 
     const stat = fs.statSync(source);

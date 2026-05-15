@@ -2,38 +2,38 @@
 
 ## Goal
 
-确认实现已经达到“可验证状态”，而不是只写了一半。
+Confirm the implementation has reached a "verifiable state", not just half-done.
 
 ## Minimal Fields
 
-默认使用多行短列表，最多写这 4 项：
+Use multi-line short lists by default, up to 4 items:
 
-- 核心改动
-- 落点文件/模块
-- 关键规则覆盖
-- 未完成项
+- Core changes
+- Target files/modules
+- Key rules covered
+- Incomplete items
 
 ## Only Add When Relevant
 
-- 高风险入口：改动范围是否已收窄、是否夹带无关逻辑
-- 跨模块：是否引入反向依赖、是否绕过既有通信链
-- 界面：关键状态是否仍放在正确容器
-- 公共接口：入口是否接入、错误路径是否完整
-- 样式系统：是否使用设计 token / 变量，是否避免硬编码可复用样式值
+- High-risk entry: has the change scope been narrowed, does it carry unrelated logic
+- Cross-module: does it introduce reverse dependencies, does it bypass existing communication chains
+- UI: are key states still in the correct container
+- Public interface: is the entry point wired up, are error paths complete
+- Style system: are design tokens/variables used, are hardcoded reusable style values avoided
 
 ## Recommended Output
 
 ```text
 Implementation gate
-- 核心改动：...
-- 落点：...
-- 规则覆盖：...
-- 未完成：...
+- Core changes: ...
+- Target: ...
+- Rules covered: ...
+- Incomplete: ...
 ```
 
-默认要求：
+Default requirements:
 
-- 简单任务可以压缩字段数量，但不要把多个字段用分号挤在一行
-- 与其他 gate 同时输出时，当前 gate 前后必须换行分隔
-- 复杂任务优先 3-4 行短列表
-- 不重复 Requirement / Design 已说过的内容
+- Simple tasks may reduce field count, but do not cram multiple fields into one line with semicolons
+- When output alongside other gates, separate with blank lines before and after
+- Complex tasks prefer 3-4 line short lists
+- Do not repeat content already stated in Requirement / Design gates

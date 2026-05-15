@@ -1,16 +1,16 @@
 # Operations Template
 
-本目录是长周期 / 多阶段 / 连续推进任务的运行态文档模板。
+This directory is the operations document template for long-running / multi-stage / continuous tasks.
 
-生成命令：
+Generate command:
 
 ```bash
 node harness/core/operations/create-operation-docs.js <initiative>
 ```
 
-默认生成到 `docs/operations/<initiative>/`。
+Defaults to generating in `docs/operations/<initiative>/`.
 
-生成文件：
+Generated files:
 
 - `current-<initiative>.md`
 - `<initiative>-board.md`

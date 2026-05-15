@@ -2,73 +2,73 @@
 
 ## Goal
 
-把“我觉得行”变成“我按什么方式验证过”。
+Turn "I think it works" into "here is how I verified it".
 
 ## Minimal Fields
 
-默认使用多行短列表，最多写这 5 项：
+Use multi-line short lists by default, up to 5 items:
 
-- 验证方式
-- 关键验证点
-- 验证结果
-- 未验证项
-- 剩余风险
+- Verification method
+- Key verification points
+- Results
+- Unverified items
+- Residual risk
 
 ## Only Add When Relevant
 
-- Bug：原复现路径和相邻场景是否覆盖
-- UI：主题、状态、响应式是否检查
-- 重构：外部行为是否确认未变
-- 跨模块：各运行边界、公共接口或桥接层是否分别验证
-- 高风险入口：哪些链路当前验证不到
+- Bug: does it cover the original reproduction path and adjacent scenarios
+- UI: are theme, states, and responsiveness checked
+- Refactor: is external behavior confirmed unchanged
+- Cross-module: are runtime boundaries, public interfaces, or bridge layers verified separately
+- High-risk entry: which chains cannot be verified currently
 
 ## Recommended Output
 
 ```text
 Verification gate
-- 已验证：...
-- 结果：...
-- 未验证：...
-- 风险：...
+- Verified: ...
+- Result: ...
+- Unverified: ...
+- Risk: ...
 ```
 
-也可以按“已验证 / 未验证 / 风险”做短分组输出，但仍应保持精简。
+Can also use "Verified / Unverified / Risk" short grouping, but keep it concise.
 
-默认要求：
+Default requirements:
 
-- 优先写命令和结论
-- 简单任务可以压缩字段数量，但不要把多个字段用分号挤在一行
-- 与其他 gate 同时输出时，当前 gate 前后必须换行分隔
-- 复杂任务优先 3-5 行短列表
-- 不因压缩省略未验证项和剩余风险
-- 未验证项必须保留
-- 代码检查不能写成运行验证
+- Prefer commands and conclusions
+- Simple tasks may reduce field count, but do not cram multiple fields into one line with semicolons
+- When output alongside other gates, separate with blank lines before and after
+- Complex tasks prefer 3-5 line short lists
+- Do not omit unverified items or residual risk for brevity
+- Unverified items must be preserved
+- Code review cannot be stated as runtime verification
 
 ## Local Dev Server / Browser Verification
 
-前端改动不默认启动本地 dev server。先判断验证是否真的需要浏览器运行态：
+Frontend changes do not start a local dev server by default. First determine whether verification truly requires a browser runtime:
 
-- 小范围文案、样式变量、间距、静态契约或纯逻辑改动：默认使用静态检查、单元测试、契约测试或构建验证，不主动占用端口。
-- 新页面、大幅 UI 改版、响应式/交互/路由/真实渲染风险，或用户明确要求预览、截图、浏览器检查时，才启动 dev server。
-- 启动前在工作更新中说明目的、命令和预计端口；启动后提供 URL，并在收口前确认是否需要保留或停止。
-- 如果端口被占用，不要反复试探；换端口前说明原因。失败的启动尝试要清理残留进程或在 Verification gate 说明未清理原因。
-- 浏览器检查结论只能覆盖实际看过的路径、视口和状态；不要把“服务已启动”写成“页面已验证”。
+- Small-scope copy, style variables, spacing, static contracts, or pure logic changes: default to static checks, unit tests, contract tests, or build verification; do not occupy a port proactively.
+- New pages, major UI overhauls, responsive/interaction/routing/real-render risks, or when the user explicitly requests preview/screenshot/browser inspection: start the dev server.
+- Before starting, state the purpose, command, and expected port in a working update; after starting, provide the URL and confirm at closeout whether to keep or stop it.
+- If the port is occupied, do not probe repeatedly; explain before switching ports. Failed start attempts should clean up residual processes or explain in Verification gate why they were not cleaned.
+- Browser inspection conclusions can only cover paths, viewports, and states actually observed; do not write "server started" as "page verified".
 
 ## Good / Bad
 
-Good：
+Good:
 
 ```text
 Verification gate
-- 已验证：npm run lint
-- 结果：通过
-- 未验证：未做端到端 smoke
-- 风险：仅覆盖静态检查，未覆盖真实运行环境
+- Verified: npm run lint
+- Result: pass
+- Unverified: no end-to-end smoke test
+- Risk: only static checks covered, real runtime environment not covered
 ```
 
-Bad：
+Bad:
 
 ```text
 Verification gate
-- 看代码没问题，应该通过。
+- Code looks fine, should pass.
 ```
