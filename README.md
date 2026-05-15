@@ -74,31 +74,31 @@ More examples:
 
 ## Quick Start
 
-**推荐方式 — git submodule：**
+**Recommended — git submodule:**
 
 ```bash
 git submodule add https://github.com/jxiaow/agent-harness.git harness/core
 mkdir -p harness/project/rules
 ```
 
-然后给 AI 一句话：
+Then tell your AI agent:
 
-> 读 `harness/core/ONBOARD.md`，根据这个仓库生成 profile 和规则。
+> Read `harness/core/ONBOARD.md` and generate the profile and rules for this repository.
 
-AI 会自动生成 `harness/project/profile.md`、项目规则和 `AGENTS.md`。
+The agent will scan your repo and generate `harness/project/profile.md`, project rules, and `AGENTS.md`.
 
-**升级 core：**
+**Update core:**
 
 ```bash
 cd harness/core && git pull origin main
 cd ../.. && git add harness/core && git commit -m "chore: update harness core"
 ```
 
-**克隆含 submodule 的仓库：**
+**Clone a repo with submodule:**
 
 ```bash
 git clone --recurse-submodules <your-repo>
-# 或已有克隆：
+# or for existing clones:
 git submodule update --init
 ```
 
@@ -125,7 +125,7 @@ Two directories, physically separated:
 
 ```text
 harness/
-├── core/                    # ← 可独立升级
+├── core/                    # ← upgradable independently
 │   ├── AGENTS.template.md
 │   ├── ONBOARD.md
 │   ├── _profile.template.md
@@ -138,7 +138,7 @@ harness/
 │   ├── rules/              # generic rules only
 │   └── templates/
 │
-└── project/                 # ← 项目专属，不随 core 迁移
+└── project/                 # ← project-specific, never overwritten by core
     ├── profile.md
     └── rules/
 ```
