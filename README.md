@@ -74,19 +74,33 @@ More examples:
 
 ## Quick Start
 
-**让 AI 自动接入（推荐）：**
+**推荐方式 — git submodule：**
 
-把 `harness/core/` 复制到目标仓库后，给 AI 一句话：
+```bash
+git submodule add https://github.com/jxiaow/agent-harness.git harness/core
+mkdir -p harness/project/rules
+```
+
+然后给 AI 一句话：
 
 > 读 `harness/core/ONBOARD.md`，根据这个仓库生成 profile 和规则。
 
-AI 会自动扫描仓库结构，生成 `profile.md`、项目规则和 `AGENTS.md`。
+AI 会自动生成 `harness/project/profile.md`、项目规则和 `AGENTS.md`。
 
-**手动接入：**
+**升级 core：**
 
-1. 导出干净副本：`node harness/core/export-open-source.js --target <dir>`
-2. 让 AI 执行 `ONBOARD.md`
-3. 或者手动参考 `_profile.template.md` 填写
+```bash
+cd harness/core && git pull origin main
+cd ../.. && git add harness/core && git commit -m "chore: update harness core"
+```
+
+**克隆含 submodule 的仓库：**
+
+```bash
+git clone --recurse-submodules <your-repo>
+# 或已有克隆：
+git submodule update --init
+```
 
 ## Optional npm Scripts
 

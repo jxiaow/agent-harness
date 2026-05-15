@@ -74,7 +74,12 @@ Requirement → Design → Implementation → Verification → Delivery
 
 ## 接入新项目
 
-把 `harness/core/` 复制到目标仓库，创建 `harness/project/` 目录，然后给 AI 一句话：
+```bash
+git submodule add https://github.com/jxiaow/agent-harness.git harness/core
+mkdir -p harness/project/rules
+```
+
+然后给 AI 一句话：
 
 > 读 `harness/core/ONBOARD.md`，根据这个仓库生成 profile 和规则。
 
