@@ -1,6 +1,6 @@
 # Workflow Reference
 
-This document contains the detailed AgentHarness process rules. Keep the root README short; use this file when adapting the harness to a real repository.
+This document contains the detailed agent-harness process rules. Keep the root README short; use this file when adapting the harness to a real repository.
 
 ## Default Workflow
 
@@ -29,7 +29,7 @@ Gates are not approval checkpoints by default. If there is no real blocker, the 
 
 ## Execution Model
 
-AgentHarness defaults to autopilot execution:
+agent-harness defaults to autopilot execution:
 
 1. If there is no real blocker, the agent continues from requirement and design through implementation, verification, and delivery.
 2. Requirement and Design gates must happen before implementation. They are records, not approval pauses.

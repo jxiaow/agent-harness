@@ -409,7 +409,7 @@ Do not treat a single 工作包完成当最终完成.
   it('fails README when final closeout target types are incomplete', () => {
     writeFixture(
       'harness/core/README.md',
-      `# AgentHarness
+      `# agent-harness
 
 final closeout 前必须先判定当前目标类型：
 
@@ -429,7 +429,7 @@ final closeout 前必须先判定当前目标类型：
   it('passes README when all final closeout target types are present', () => {
     writeFixture(
       'harness/core/README.md',
-      `# AgentHarness
+      `# agent-harness
 
 final closeout 前必须先判定当前目标类型：
 

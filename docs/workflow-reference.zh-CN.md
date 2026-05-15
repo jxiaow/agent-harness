@@ -1,6 +1,6 @@
 # 工作流参考
 
-本文包含 AgentHarness 的详细流程规则。根 README 保持简短；把 harness 接入真实仓库时，再阅读本文。
+本文包含 agent-harness 的详细流程规则。根 README 保持简短；把 harness 接入真实仓库时，再阅读本文。
 
 ## 默认工作流
 
@@ -29,7 +29,7 @@
 
 ## 执行模型
 
-AgentHarness 默认按 autopilot 执行：
+agent-harness 默认按 autopilot 执行：
 
 1. 没有真实阻塞时，agent 从需求和设计继续推进到实现、验证和交付。
 2. Requirement 和 Design gate 必须在实现前输出。它们是过程记录，不是审批暂停点。

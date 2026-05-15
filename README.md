@@ -1,6 +1,6 @@
-# AgentHarness
+# agent-harness
 
-AgentHarness is a portable process layer for AI coding agents. It makes agents state requirements, choose a design, implement within project rules, verify the result, and deliver a clear closeout instead of jumping straight into edits.
+agent-harness is a portable process layer for AI coding agents. It makes agents state requirements, choose a design, implement within project rules, verify the result, and deliver a clear closeout instead of jumping straight into edits.
 
 It is for teams using tools like Codex, Claude Code, Gemini CLI, or custom coding agents inside real repositories where "just change the code" often turns into skipped context, half-finished refactors, vague verification, or messy docs.
 
@@ -16,7 +16,7 @@ AI coding agents are useful, but they fail in predictable ways:
 - They mix stable docs, transition plans, and execution checklists in the same place.
 - They say something is verified without showing what was actually run.
 
-AgentHarness turns those failure modes into a small, repeatable workflow:
+agent-harness turns those failure modes into a small, repeatable workflow:
 
 ```text
 Requirement -> Design -> Implementation -> Verification -> Delivery
@@ -42,7 +42,7 @@ User: Fix the deployment page bug.
 Agent: I changed three files. It should work now.
 ```
 
-With AgentHarness:
+With agent-harness:
 
 ```text
 Task type
@@ -146,7 +146,7 @@ harness/
 ## More Documentation
 
 - [Workflow reference](docs/workflow-reference.md)
-- [Maintaining AgentHarness](docs/maintaining.md)
+- [Maintaining agent-harness](docs/maintaining.md)
 - [中文工作流参考](docs/workflow-reference.zh-CN.md)
 - [中文维护说明](docs/maintaining.zh-CN.md)
 

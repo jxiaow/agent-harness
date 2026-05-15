@@ -1,4 +1,4 @@
-# Maintaining AgentHarness
+# Maintaining agent-harness
 
 This document is for maintainers of the harness itself. It does not need to be read by most users who only copy the harness into a repository.
 

@@ -1,6 +1,6 @@
-# AgentHarness
+# agent-harness
 
-AgentHarness 是一个给 AI coding agent 使用的可移植流程层。它让 agent 在直接动手改代码之前，先说明需求、选择设计方案、在项目规则内实现、验证结果，并输出清晰的交付收口。
+agent-harness 是一个给 AI coding agent 使用的可移植流程层。它让 agent 在直接动手改代码之前，先说明需求、选择设计方案、在项目规则内实现、验证结果，并输出清晰的交付收口。
 
 它适合在真实仓库里使用 Codex、Claude Code、Gemini CLI 或自定义 coding agent 的团队。在这些仓库里，一句“直接改代码”经常会变成跳过上下文、重构半途而止、验证含糊，或文档变乱。
 
@@ -16,7 +16,7 @@ AI coding agent 很有用，但它们会以可预测的方式失败：
 - 把稳定文档、过渡计划和执行 checklist 混在同一个地方。
 - 没说明实际运行了什么验证，就说某件事已经验证过。
 
-AgentHarness 把这些失败模式收敛成一个小而可重复的工作流：
+agent-harness 把这些失败模式收敛成一个小而可重复的工作流：
 
 ```text
 Requirement -> Design -> Implementation -> Verification -> Delivery
@@ -42,7 +42,7 @@ User: Fix the deployment page bug.
 Agent: I changed three files. It should work now.
 ```
 
-使用 AgentHarness 时：
+使用 agent-harness 时：
 
 ```text
 Task type
@@ -140,7 +140,7 @@ harness/core/
 ## 更多文档
 
 - [Workflow reference](docs/workflow-reference.md)
-- [Maintaining AgentHarness](docs/maintaining.md)
+- [Maintaining agent-harness](docs/maintaining.md)
 - [中文工作流参考](docs/workflow-reference.zh-CN.md)
 - [中文维护说明](docs/maintaining.zh-CN.md)
 

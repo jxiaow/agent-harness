@@ -1,4 +1,4 @@
-# 维护 AgentHarness
+# 维护 agent-harness
 
 本文面向 harness 本身的维护者。只把 harness 复制到仓库中使用的普通用户，一般不需要阅读本文。
 
